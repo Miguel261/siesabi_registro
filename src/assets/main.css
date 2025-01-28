@@ -1,0 +1,29 @@
+/* Aplicar un diseño flexible a la estructura principal */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* El contenido principal ocupa todo el espacio restante */
+main {
+    flex: 1;
+}
+
+/* El footer permanece al final */
+.main-footer {
+    background-color: #611232;
+    color: #FFF;
+    text-align: left;
+    font-weight: 300;
+    padding: 10px 0;
+}
+
