@@ -1,6 +1,6 @@
 <template>
     <footer class="main-footer">
-        <br>
+        <br><br>
         <div class="list-info">
             <div class="container">
                 <div class="row">
@@ -87,11 +87,12 @@ export default {
 
 .main-footer {
     background-color: #611232;
-    min-height: 56px;
+    min-height: 300px;
     color: #FFF;
     padding: 0px 0 0px;
     text-align: left;
     font-weight: 300;
+    position: relative;
 }
 
 article,
@@ -143,5 +144,17 @@ html {
     background-color: #fff;
     background-image: url(https://framework-gb.cdn.gob.mx/gobmx/img/pleca.svg);
     background-repeat: repeat-x;
+}
+
+@media (max-width: 768px) {
+    .list-info{
+        background-color: #611232;
+    }
+}
+
+@media (max-width: 1000px) {
+    .list-info {
+        background-color: #611232;
+    }
 }
 </style>

@@ -59,6 +59,7 @@
 .letra {
     color: white;
     font-size: 14px;
+    font-family: 'Patria';
 }
 
 @media (min-width: 992px) {

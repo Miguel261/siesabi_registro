@@ -1,14 +1,48 @@
-import './assets/main.css'
+import './assets/main.css';
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import PrimeVue from 'primevue/config';
+import App from './App.vue';
+import router from './router';
 
-import App from './App.vue'
-import router from './router'
 
-const app = createApp(App)
+import 'primeicons/primeicons.css';
 
-app.use(createPinia())
-app.use(router)
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ToastService from 'primevue/toastservice';
+import Password from 'primevue/password';
+import Button from 'primevue/button';
+import Paginator from 'primevue/paginator';
+import ColumnGroup from 'primevue/columngroup';
+import Row from 'primevue/row';
+import Dialog from 'primevue/dialog';
+import Card from 'primevue/card';
 
-app.mount('#app')
+/* --- CONFIGURACIÓN DE PINIA (STORE) ADEMAS DE LA PERSISTENCIA DE DATOS ---*/
+
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate); // Aplicas el plugin de persistencia
+
+const app = createApp(App);
+app.use(PrimeVue); 
+app.use(pinia); // Usas la misma instancia de Pinia con el plugin aplicado
+app.use(router);
+
+/* --- COMPONENTES DE PRIMEVUE 4.0 ---*/
+
+app.component('Password', Password);
+app.component('Button', Button);
+app.component('DataTable', DataTable);
+app.component('Column', Column);
+app.component('Paginator', Paginator);
+app.component('ColumnGroup', ColumnGroup);
+app.component('Row', Row);
+app.component('Dialog', Dialog);
+app.component('Card', Card);
+
+app.use(ToastService);
+
+app.mount('#app');
