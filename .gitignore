@@ -12,7 +12,10 @@ node_modules
 dist
 dist-ssr
 coverage
+.svcode
 *.local
+.env
+package-lock.json
 
 /cypress/videos/
 /cypress/screenshots/
