@@ -18,8 +18,8 @@
                         type="button" role="tab" aria-controls="video" aria-selected="false">Video en vivo</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
-                        type="button" role="tab" aria-controls="video" aria-selected="false">Banners</button>
+                    <button class="nav-link fuente" id="banner-tab" data-bs-toggle="tab" data-bs-target="#banner"
+                        type="button" role="tab" aria-controls="banner" aria-selected="false">Banners</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
@@ -58,18 +58,23 @@
                     <br><br>
                     <VideoVivo></VideoVivo>
                 </div>
+                <div class="tab-pane fade" id="banner" role="tabpanel" aria-labelledby="banner-tab">
+                    <br><br>
+                    <Banner></Banner>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import Users from '@/components/manager/Users.vue';
+import Banner from '@/components/manager/Banner.vue';
 import CretaUsersCuvanos from '@/components/manager/CreateUsersCubanos.vue';
+import Users from '@/components/manager/Users.vue';
 import VideoVivo from '@/components/manager/VideoVivo.vue';
 
-import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
+import { onMounted } from 'vue';
 
 const authStore = useAuthStore();
 
