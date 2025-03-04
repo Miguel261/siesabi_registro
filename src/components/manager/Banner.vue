@@ -10,8 +10,9 @@
                <InputText id="link" v-model="formLink" class="mt-0 fs-4" autocomplete="off" />
           </div>
           <div class="mt-4">
-               <FileUpload :auto="true" name="file" choose-label="Selecciona tu imagen *" :custom-upload="true"
-                    @select="onSelectFile" mode="basic" class="fs-4">
+               <FileUpload :auto="true" accept=".png, .jpg, .jpeg, .webp, .gif" name="file"
+                    choose-label="Selecciona tu imagen *" :custom-upload="true" @select="onSelectFile" mode="basic"
+                    class="fs-4">
                </FileUpload>
           </div>
           <div class="d-flex gap-2 my-4">
@@ -171,6 +172,14 @@ const deleteItems = async () => {
      }
      await getAllBanners()
      bannersSelected.value = []
+
+     swal({
+          timer: 3000,
+          title: 'Buenas noticias',
+          text: 'Los banners seleccionados se eliminaron correctamente',
+          buttons: false,
+          icon: 'success'
+     })
 }
 
 const onSelectFile = event => {
@@ -223,7 +232,7 @@ const onMessages = (res) => {
                })
                break;
           case 409:
-               swal(configSwal = {
+               swal({
                     icon: 'error',
                     title: 'Error',
                     text: res.response.data.message,

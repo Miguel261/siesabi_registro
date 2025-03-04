@@ -22,8 +22,9 @@
                         type="button" role="tab" aria-controls="banner" aria-selected="false">Banners</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
-                        type="button" role="tab" aria-controls="video" aria-selected="false">
+                    <button class="nav-link fuente" id="privacity-notice-tab" data-bs-toggle="tab"
+                        data-bs-target="#privacity-notice" type="button" role="tab" aria-controls="privacity-notice"
+                        aria-selected="false">
                         Aviso de privacidad
                     </button>
                 </li>
@@ -62,6 +63,10 @@
                     <br><br>
                     <Banner></Banner>
                 </div>
+                <div class="tab-pane fade" id="privacity-notice" role="tabpanel" aria-labelledby="privacity-notice-tab">
+                    <br><br>
+                    <PrivacityNotice></PrivacityNotice>
+                </div>
             </div>
         </div>
     </div>
@@ -70,6 +75,7 @@
 <script setup>
 import Banner from '@/components/manager/Banner.vue';
 import CretaUsersCuvanos from '@/components/manager/CreateUsersCubanos.vue';
+import PrivacityNotice from '@/components/manager/PrivacityNotice.vue';
 import Users from '@/components/manager/Users.vue';
 import VideoVivo from '@/components/manager/VideoVivo.vue';
 
