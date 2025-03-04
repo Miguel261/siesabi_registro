@@ -14,22 +14,22 @@
                <Checkbox v-model="formVisible" inputId="visible" name="visible" value="Visible" />
                <label for="visible">Visible</label>
           </div>
-          <Button icon="pi pi-external-link" severity="danger" class="fs-4" @click="onSavePrivateNoticy"
+          <Button icon="pi pi-external-link" severity="danger" class="fs-4" @click="onSaveEducationalOffer"
                label="Subir" />
           <p class="text-form text-secondary fs-5 mt-4">* Completa estos campos</p>
      </Dialog>
 
-     <DataTable :value="privateNotice" v-if="privateNotice.length > 0" v-model:selection="privateNoticeSelected"
-          class="fs-4" data-key="id" tableStyle="min-width: 50rem">
+     <DataTable :value="educationalOffer" v-if="educationalOffer.length > 0"
+          v-model:selection="educationalOfferSelected" class="fs-4" data-key="id" tableStyle="min-width: 50rem">
           <template #header>
                <div class="pb-2 d-flex gap-2 justify-content-between">
                     <div class="fs-3">
-                         Lista de archivos de Avisos de Privacidad
+                         Lista de archivos de Oferta Educativa
                     </div>
                     <div class="d-flex gap-2">
                          <Button icon="pi pi-external-link" class="fs-4" label="Agregar un nuevo archivo"
                               @click="visible = true" />
-                         <Button icon="pi pi-external-link" class="fs-4" :disabled="privateNoticeSelected.length < 1"
+                         <Button icon="pi pi-external-link" class="fs-4" :disabled="educationalOfferSelected.length < 1"
                               severity="danger" label="Eliminar archivos selecconados" @click="deleteItems" />
                     </div>
                </div>
@@ -53,10 +53,10 @@
           </Column>
      </DataTable>
 
-     <div class="w-full bg-light p-5" v-if="privateNotice.length < 1">
+     <div class="w-full bg-light p-5" v-if="educationalOffer.length < 1">
           <div class="pb-2 d-flex gap-5 flex-column align-items-center justify-content-center">
                <div class="fs-3">
-                    Sin Avisos de Privacidad registrados, preciona el boton de abajo para agregar alguno
+                    Sin Ofertas Educativas registrados, preciona el boton de abajo para agregar alguno
                </div>
                <div class="d-flex gap-2">
                     <Button icon="pi pi-external-link" class="fs-4" label="Agregar nuevo banner"
@@ -81,8 +81,8 @@ import { onMounted, ref } from 'vue';
 
 const authStore = useAuthStore()
 const url = import.meta.env.VITE_URL_HOST;
-const privateNotice = ref([])
-const privateNoticeSelected = ref([])
+const educationalOffer = ref([])
+const educationalOfferSelected = ref([])
 const rows = ref(0)
 const visible = ref(false)
 
@@ -101,14 +101,14 @@ const config = {
 }
 
 const getAllFiles = async () => {
-     const { status, data } = await axios.get(`${url}/api/private-notice/all`, config)
+     const { status, data } = await axios.get(`${url}/api/educational-offer/all`, config)
 
 
      if (status == 200) {
           rows.value = data.size
-          privateNotice.value = []
-          privateNoticeSelected.value = []
-          Array.from(data.results).forEach(banner => privateNotice.value.push(banner))
+          educationalOffer.value = []
+          educationalOfferSelected.value = []
+          Array.from(data.results).forEach(banner => educationalOffer.value.push(banner))
      }
 }
 
@@ -119,20 +119,20 @@ const enableOrDisableFile = async (id, status) => {
      await getAllFiles()
 }
 
-const enableBanner = async id => await axios.put(`${url}/api/private-notice/${id}/enable`, null, config);
-const disableBanner = async id => await axios.put(`${url}/api/private-notice/${id}/disable`, null, config);
+const enableBanner = async id => await axios.put(`${url}/api/educational-offer/${id}/enable`, null, config);
+const disableBanner = async id => await axios.put(`${url}/api/educational-offer/${id}/disable`, null, config);
 
 const deleteItem = async (id) => {
-     await axios.delete(`${url}/api/private-notice/${id}`, config)
+     await axios.delete(`${url}/api/educational-offer/${id}`, config)
           .catch(err => swal('Error!', 'Error al intentar eliminar el banner.' + err.message, 'error'))
 }
 
 const deleteItems = async () => {
-     for (const banner of privateNoticeSelected.value) {
+     for (const banner of educationalOfferSelected.value) {
           await deleteItem(banner.id)
      }
      await getAllFiles()
-     privateNoticeSelected.value = []
+     educationalOfferSelected.value = []
      swal({
           timer: 3000,
           title: 'Buenas noticias',
@@ -146,7 +146,7 @@ const onSelectFile = event => {
      file.value = event.files[0]
 }
 
-const onSavePrivateNoticy = async () => {
+const onSaveEducationalOffer = async () => {
      if (!validateForm()) {
           swal('Completa los campos', 'Debes de asignar un titulo y seleccionar una imagen almenos', 'info')
           return;
@@ -156,7 +156,7 @@ const onSavePrivateNoticy = async () => {
      body.append('is_enabled', formVisible.value.length > 0 ? 1 : 0)
      body.append('file', file.value)
 
-     await axios.post(`${url}/api/private-notice/create`, body, config)
+     await axios.post(`${url}/api/educational-offer/create`, body, config)
           .then(async res => {
                if (res.status == 201) {
                     await getAllFiles()
