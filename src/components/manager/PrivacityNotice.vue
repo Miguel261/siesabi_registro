@@ -1,66 +1,76 @@
 <template>
-     <Dialog v-model:visible="visible" maximizable modal class="fs-4" header="Agregar un nuevo banner"
-          :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-          <div class="d-flex flex-column gap-1 mb-4">
-               <label for="title" class="font-semibold">Titulo del pdf *</label>
-               <InputText id="title" v-model="formTitle" class="flex-auto fs-4" autocomplete="off" />
-          </div>
-          <div class="mt-4">
-               <FileUpload :auto="true" accept=".pdf" name="file" choose-label="Selecciona tu Archivo *"
-                    :custom-upload="true" @select="onSelectFile" mode="basic" class="fs-4">
-               </FileUpload>
-          </div>
-          <div class="d-flex gap-2 my-4">
-               <Checkbox v-model="formVisible" inputId="visible" name="visible" value="Visible" />
-               <label for="visible">Visible</label>
-          </div>
-          <Button icon="pi pi-external-link" severity="danger" class="fs-4" @click="onSavePrivateNoticy"
-               label="Subir" />
-          <p class="text-form text-secondary fs-5 mt-4">* Completa estos campos</p>
-     </Dialog>
+     <div class="mb-5">
+          <Dialog v-model:visible="visible" maximizable modal class="fs-4" header="Agregar un nuevo banner"
+               :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+               <div class="d-flex flex-column gap-1 mb-4">
+                    <label for="title" class="font-semibold">Titulo del pdf *</label>
+                    <InputText id="title" v-model="formTitle" class="flex-auto fs-4" autocomplete="off" />
+               </div>
+               <div class="mt-4">
+                    <FileUpload :auto="true" accept=".pdf" name="file" choose-label="Selecciona tu Archivo *"
+                         :custom-upload="true" @select="onSelectFile" mode="basic" class="fs-4">
+                    </FileUpload>
+               </div>
+               <div class="d-flex gap-2 my-4">
+                    <Checkbox v-model="formVisible" inputId="visible" name="visible" value="Visible" />
+                    <label for="visible">Visible</label>
+               </div>
+               <Button icon="pi pi-external-link" severity="danger" class="fs-4" @click="onSavePrivateNoticy"
+                    label="Subir" />
+               <p class="text-form text-secondary fs-5 mt-4">* Completa estos campos</p>
+          </Dialog>
 
-     <DataTable :value="privateNotice" v-if="privateNotice.length > 0" v-model:selection="privateNoticeSelected"
-          class="fs-4" data-key="id" tableStyle="min-width: 50rem">
-          <template #header>
-               <div class="pb-2 d-flex gap-2 justify-content-between">
+          <DataTable :value="privateNotice" v-if="privateNotice.length > 0" v-model:selection="privateNoticeSelected"
+               class="fs-4" data-key="id" tableStyle="min-width: 50rem">
+               <template #header>
+                    <div class="pb-2 d-flex gap-2 justify-content-between">
+                         <div class="fs-3">
+                              Lista de archivos de Avisos de Privacidad
+                         </div>
+                         <div class="d-flex gap-2">
+                              <Button icon="pi pi-external-link" class="fs-4" label="Agregar un nuevo archivo"
+                                   @click="visible = true" />
+                              <Button icon="pi pi-external-link" class="fs-4"
+                                   :disabled="privateNoticeSelected.length < 1" severity="danger"
+                                   label="Eliminar archivos selecconados" @click="deleteItems" />
+                         </div>
+                    </div>
+               </template>
+               <Column selectionMode="multiple" headerStyle="width: 3rem" style="width: 5%;"></Column>
+               <Column field="id" header="ID" :sortable="true" style="width: 5%"></Column>
+               <Column header="Publicado" style="width: 7%;">
+                    <template #body="{ data }">
+                         <button type="button" class="align-self-center fs-3 p-2 bg-transparent border-0"
+                              @click="enableOrDisableFile(data.id, data.isEnabled)">
+                              <i v-if="data.isEnabled" class="pi pi-eye fs-3"></i>
+                              <i v-if="!data.isEnabled" class="pi pi-eye-slash fs-3"></i>
+                         </button>
+                    </template>
+               </Column>
+               <Column header="Titulo" style="width: 15%">
+                    <template #body="{ data }">
+                         <div class="d-flex justify-content-start gap-2 flex-wrap align-items-center">
+                              <span>{{ data.name }}</span>
+                              <span v-if="data.isEnabled" class="badge text-bg-primary">(Predeterminado)</span>
+                         </div>
+                    </template>
+               </Column>
+               <Column header="Enlace de descarga" style="width: 25%">
+                    <template #body="{ data }">
+                         <a :href="data.link" v-if="data.link" target="_blank">Descargar archivo</a>
+                    </template>
+               </Column>
+          </DataTable>
+
+          <div class="w-full bg-light p-5" v-if="privateNotice.length < 1">
+               <div class="pb-2 d-flex gap-5 flex-column align-items-center justify-content-center">
                     <div class="fs-3">
-                         Lista de archivos de Avisos de Privacidad
+                         Sin Avisos de Privacidad registrados, preciona el boton de abajo para agregar alguno
                     </div>
                     <div class="d-flex gap-2">
-                         <Button icon="pi pi-external-link" class="fs-4" label="Agregar un nuevo archivo"
+                         <Button icon="pi pi-external-link" class="fs-4" label="Agregar nuevo banner"
                               @click="visible = true" />
-                         <Button icon="pi pi-external-link" class="fs-4" :disabled="privateNoticeSelected.length < 1"
-                              severity="danger" label="Eliminar archivos selecconados" @click="deleteItems" />
                     </div>
-               </div>
-          </template>
-          <Column selectionMode="multiple" headerStyle="width: 3rem" style="width: 5%;"></Column>
-          <Column field="id" header="ID" :sortable="true" style="width: 5%"></Column>
-          <Column header="Publicado" style="width: 7%;">
-               <template #body="{ data }">
-                    <button type="button" class="align-self-center fs-3 p-2 bg-transparent border-0"
-                         @click="enableOrDisableFile(data.id, data.isEnabled)">
-                         <i v-if="data.isEnabled" class="pi pi-eye fs-3"></i>
-                         <i v-if="!data.isEnabled" class="pi pi-eye-slash fs-3"></i>
-                    </button>
-               </template>
-          </Column>
-          <Column field="name" header="Titulo" style="width: 15%"></Column>
-          <Column header="Enlace de descarga" style="width: 25%">
-               <template #body="{ data }">
-                    <a :href="data.link" v-if="data.link" target="_blank">Descargar archivo</a>
-               </template>
-          </Column>
-     </DataTable>
-
-     <div class="w-full bg-light p-5" v-if="privateNotice.length < 1">
-          <div class="pb-2 d-flex gap-5 flex-column align-items-center justify-content-center">
-               <div class="fs-3">
-                    Sin Avisos de Privacidad registrados, preciona el boton de abajo para agregar alguno
-               </div>
-               <div class="d-flex gap-2">
-                    <Button icon="pi pi-external-link" class="fs-4" label="Agregar nuevo banner"
-                         @click="visible = true" />
                </div>
           </div>
      </div>

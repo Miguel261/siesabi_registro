@@ -29,8 +29,8 @@
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
-                        type="button" role="tab" aria-controls="video" aria-selected="false">
+                    <button class="nav-link fuente" id="faq-tab" data-bs-toggle="tab" data-bs-target="#faq"
+                        type="button" role="tab" aria-controls="faq" aria-selected="false">
                         Faq
                     </button>
                 </li>
@@ -73,6 +73,10 @@
                     <br><br>
                     <EducationalOffer></EducationalOffer>
                 </div>
+                <div class="tab-pane fade" id="faq" role="tabpanel" aria-labelledby="faq-tab">
+                    <br><br>
+                    <Faq />
+                </div>
             </div>
         </div>
     </div>
@@ -82,6 +86,7 @@
 import Banner from '@/components/manager/Banner.vue';
 import CretaUsersCuvanos from '@/components/manager/CreateUsersCubanos.vue';
 import EducationalOffer from '@/components/manager/EducationalOffer.vue';
+import Faq from '@/components/manager/Faq.vue';
 import PrivacityNotice from '@/components/manager/PrivacityNotice.vue';
 import Users from '@/components/manager/Users.vue';
 import VideoVivo from '@/components/manager/VideoVivo.vue';
