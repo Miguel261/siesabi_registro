@@ -16,8 +16,7 @@
             <div class="col-12 d-flex flex-column flex-md-row align-items-start gap-3">
                 <!-- iframe -->
                 <div class="col-12 col-md-6">
-                    <iframe src="https://www.youtube.com/embed/ejemplo"
-                        style="width: 100%; height: 300px; border: none;" allowfullscreen>
+                    <iframe :src="src" style=" width: 100%; height: 300px; border: none;" allowfullscreen>
                     </iframe>
                 </div>
 
@@ -26,27 +25,27 @@
                     <!-- Input 1 -->
                     <div class="d-flex flex-column flex-md-row justify-content-end align-items-center gap-2">
                         <input type="text" class="col-md-12 col-sm-12 input-search fuente" placeholder="Título"
-                            required>
+                            v-model="title" required>
                     </div>
 
                     <!-- Input 2 -->
                     <div class="d-flex flex-column flex-md-row justify-content-end align-items-center gap-2">
-                        <input type="text" class="col-md-12 col-sm-12 input-search fuente"
+                        <input type="text" class="col-md-12 col-sm-12 input-search fuente" v-model="link"
                             placeholder="Link (a donde será dirigido al dar clic en el título)" required>
                     </div>
 
                     <!-- Input 3 -->
                     <div class="d-flex flex-column flex-md-row justify-content-end align-items-center gap-2">
-                        <input type="text" class="col-md-12 col-sm-12 input-search fuente"
+                        <input type="text" class="col-md-12 col-sm-12 input-search fuente" v-model="src"
                             placeholder="SRC (fuente del video)" required>
                     </div>
 
                     <!-- Botones -->
                     <div class="d-flex flex-column flex-md-row justify-content-end align-items-center gap-2">
                         <Button style="height: 44px;" class="col-md-2 col-sm-12 Button-manager custom-icon"
-                            label="Actualizar" icon="pi pi-sync" />
+                            label="Actualizar" v-on:click="SaveVideo" icon="pi pi-sync" />
                         <Button style="height: 44px;" class="col-md-2 col-sm-12 Button-secundary custom-icon"
-                            label="Activar" icon="pi pi-power-off" />
+                            :label="label" v-on:click="ButtonActivateOpc" icon="pi pi-power-off" />
                     </div>
                 </div>
             </div>
@@ -69,51 +68,134 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useAuthStore } from '@/stores/auth';
-import { handleGeneralError } from "@/errors/GeneralErrors";
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import swal from 'sweetalert';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
+
+onMounted(async () => {
+    await getVideo();
+});
 
 const router = useRouter();
 const url = import.meta.env.VITE_URL_HOST;
 const authStore = useAuthStore();
 
 const isLoading = ref(false);
-const usersSiesabi = ref(null);
 
-const SearchUserSiesabi = async () => {
+const id = ref(null);
+const title = ref(null);
+const link = ref(null);
+const src = ref(null);
+const activate = ref(null);
+const label = ref('');
+
+const getVideo = async () => {
     try {
         isLoading.value = true;
-        const response = await axios.get(`${url}/api/user`, {
+        const response = await axios.get(`${url}/api/live/default`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getAccessToken}`
             }
         });
 
-        if (response.status == 200) {
-            usersSiesabi.value = [
-                {
-                    'name': 'Miguel Angel Figueroa Fajardo',
-                    'curp': 'FIFM961026HGRGJG04',
-                    'email': 'miguel.angel.figueroa.fajardo@gmail.com',
-                    'data_personal': 'Completados',
-                    'data_laboral': 'Completados',
-                    'cuenta_moodle': 'Existe',
-                    'date': '03/06/2024',
-                    'verify': '15/01/2025',
-                    'old_update': 'hace 4 semanas',
-                }
-            ]
-            isLoading.value = false;
-        }
+        title.value = response.data.title;
+        link.value = response.data.link;
+        src.value = response.data.src;
+        id.value = response.data.id;
+        activate.value = response.data.is_enabled;
+
+        label.value = response.data.is_enabled === 0 ? 'Activar' : 'Desactivar';
     }
     catch (error) {
+        console.log(error);
+    }
+    finally {
         isLoading.value = false;
-        handleGeneralError(error, router, authStore);
     }
 };
 
+const SaveVideo = async () => {
+    try {
+        isLoading.value = true;
+        const response = await axios.post(`${url}/api/live/create`, {
+            title: title.value,
+            src: src.value,
+            link: link.value,
+            is_enabled: 0
+        }, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getAccessToken}`
+            }
+        });
+
+        if (response.status === 201) {
+            swal("Se actualizo el video con exito!", {
+                icon: "success",
+                title: "Atención!",
+                buttons: "OK"
+            })
+                .then(async (Ok) => {
+                    if (Ok) {
+                        await getVideo();
+                    }
+                });
+
+        }
+    }
+    catch (error) {
+        console.log(error)
+    }
+    finally {
+        isLoading.value = false;
+    }
+};
+
+const ButtonActivateOpc = () => {
+    if (label.value === 'Activar') {
+        ActiveVideo();
+    }
+    else {
+        DesactiveVideo();
+    }
+};
+
+const ActiveVideo = async () => {
+    try {
+        isLoading.value = true;
+        await axios.put(`${url}/api/live/${id.value}/enable`, {}, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getAccessToken}`
+            }
+        });
+        await getVideo(); // Vuelve a cargar los datos
+    }
+    catch (error) {
+        console.log(error);
+    }
+    finally {
+        isLoading.value = false;
+    }
+}
+
+const DesactiveVideo = async () => {
+    try {
+        isLoading.value = true;
+        await axios.put(`${url}/api/live/${id.value}/disable`, {}, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getAccessToken}`
+            }
+        });
+        await getVideo(); // Vuelve a cargar los datos
+    }
+    catch (error) {
+        console.log(error);
+    }
+    finally {
+        isLoading.value = false;
+    }
+}
 </script>
 
 
@@ -128,6 +210,7 @@ const SearchUserSiesabi = async () => {
     border: 2px solid gray;
     background-color: #f8f9fa;
 }
+
 .Button-secundary {
     height: 50px;
     border-radius: 15px;

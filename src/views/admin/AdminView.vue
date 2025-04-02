@@ -5,26 +5,31 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active fuente" id="users-tab" data-bs-toggle="tab" data-bs-target="#users"
-                        type="button" role="tab" aria-controls="users" aria-selected="true">Usuarios registrados</button>
+                        type="button" role="tab" aria-controls="users" aria-selected="true">Usuarios
+                        registrados</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="create-user-tab" data-bs-toggle="tab"
-                        data-bs-target="#create-user" type="button" role="tab" aria-controls="create-user"
-                        aria-selected="false">Directorio</button>
+                    <button class="nav-link fuente" id="directory-tab" data-bs-toggle="tab" data-bs-target="#directory"
+                        type="button" role="tab" aria-controls="directory" aria-selected="false">Directorio</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
                         type="button" role="tab" aria-controls="video" aria-selected="false">Pruebas</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="manager-tab" data-bs-toggle="tab" 
-                        type="button" role="tab" v-on:click="manager" 
-                        aria-selected="false">Manager</button>
+                    <button class="nav-link fuente" id="manager-tab" data-bs-toggle="tab" type="button" role="tab"
+                        v-on:click="manager" aria-selected="false">Manager</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
                         type="button" role="tab" aria-controls="video" aria-selected="false">
-                        Registro de errores</button>
+                        Clues</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link fuente" id="credentials-tab" data-bs-toggle="tab"
+                        data-bs-target="#credentials" type="button" role="tab" aria-controls="credentials"
+                        aria-selected="false">
+                        Credenciales</button>
                 </li>
             </ul>
 
@@ -33,13 +38,21 @@
                     <br><br>
                     <Users></Users>
                 </div>
+                <div class="tab-pane fade" id="directory" role="tabpanel" aria-labelledby="directory-tab">
+                    <br><br>
+                    <DirectoryView></DirectoryView>
+                </div>
                 <div class="tab-pane fade" id="create-user" role="tabpanel" aria-labelledby="create-user-tab">
                     <br><br>
-                    <CretaUsersCuvanos></CretaUsersCuvanos>
+
                 </div>
                 <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
                     <br><br>
-                    <VideoVivo></VideoVivo>
+
+                </div>
+                <div class="tab-pane fade" id="credentials" role="tabpanel" aria-labelledby="credentials-tab">
+                    <br><br>
+                    <CredentialsView></CredentialsView>
                 </div>
             </div>
         </div>
@@ -48,8 +61,8 @@
 
 <script setup>
 import Users from '@/components/admin/Users.vue';
-import CretaUsersCuvanos from '@/components/manager/CreateUsersCubanos.vue';
-import VideoVivo from '@/components/manager/VideoVivo.vue';
+import CredentialsView from '@/components/admin/CredentialsView.vue';
+import DirectoryView from '@/components/admin/Directory/DirectoryView.vue';
 import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';

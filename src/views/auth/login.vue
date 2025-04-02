@@ -70,10 +70,12 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from "@/stores/auth";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
-
+import { useToast } from "primevue/usetoast";
+import swal from 'sweetalert';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const toast = useToast();
 
 const url = import.meta.env.VITE_URL_HOST;
 const isLoading = ref(false);
@@ -108,7 +110,7 @@ function submitForm() {
         //recaptchaToken: recaptchaToken.value,
     })
         .then((response) => {
-            authStore.setTokens(response.data.accessToken, response.data.refreshToken, response.data.roles[0]);
+            authStore.setTokens(response.data.accessToken, response.data.refreshToken, response.data.roles[0], response.data.permissions);
             isLoading.value = false;
             if (response.data.roles[0] === 'admin') {
                 router.push('/admin');
@@ -118,7 +120,17 @@ function submitForm() {
         })
         .catch((error) => {
             isLoading.value = false;
-            console.error('Error al enviar el formulario:', error);
+            if (error.response.data.statusCode === 401){
+                showErrorEmail();
+                return;
+            }
+
+            if (error.response.data.statusCode === 404) {
+                showErrorCredentials();
+                return;
+            }
+
+            swal("Error!", "Error del servidor! Intenta nuevamente más tarde.", "error");
         });
 }
 
@@ -129,6 +141,24 @@ onMounted(() => {
     script.defer = true;
     document.head.appendChild(script);
 });
+
+const showErrorEmail = () => {
+    toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Credenciales incorrectas`,
+        life: 3000
+    });
+};
+
+const showErrorCredentials = () => {
+    toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: `Las credenciales no existen en nuestros registros`,
+        life: 3000
+    });
+};
 </script>
 
 <style>

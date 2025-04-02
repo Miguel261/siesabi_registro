@@ -16,41 +16,42 @@
                 <Card class="col-md-8 col-sm-12 carta justify-content-center">
                     <template #content>
                         <div class="col-12 d-flex justify-content-center align-items-center">
-                            <div class="col-10 d-flex justify-content-between align-items-center">
+                            <div
+                                class="col-11 d-flex justify-content-between align-items-center flex-column flex-sm-row">
                                 <!-- Contenedor para la imagen y los labels -->
                                 <div class="d-flex align-items-center">
                                     <!-- Imagen en forma de círculo -->
-                                    <img class="avatar"
+                                    <img class="avatar d-none d-sm-block"
                                         src="https://educacion.imssbienestar.gob.mx/images/logos/mi_siesabi.png?id=4e901e4be2631289ad87d17c063293bf"
                                         alt="Imagen de bienvenida">
 
-                                    <hr style="border: none; border-left: 2.5px solid hsla(200, 10%, 50%,100);
-                                    height: 150px; width: 20px;">
-
+                                    <hr class="linea d-none d-sm-block" style="border: none; border-left: 2.5px solid hsla(200, 10%, 50%,100);
+                    height: 150px; width: 20px;">
 
                                     <!-- Contenedor para los labels (uno debajo del otro) -->
                                     <div style="display: flex; flex-direction: column; align-items: flex-start;">
                                         <label style="color: gray; font-size: 43px;" class="fuente-titulo">
                                             {{ genero }}
                                         </label>
-                                        <label style="color: black; font-size: 20px; font-weight: bold;" class="fuente">
+                                        <label style="color: black; font-size: 19px; font-weight: bold;" class="fuente">
                                             {{ userData.name }}
                                         </label>
                                     </div>
                                 </div>
 
                                 <!-- Contenedor para los botones (alineados a la parte inferior de la imagen) -->
-                                <div class="d-flex align-self: flex-end;">
-                                    <Button class="col-5 fuente Button-manager custom-icon" v-on:click="ViewManager"
-                                        label="Manager" icon="pi pi-crown" />
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <Button class="col-7 fuente Button-courses custom-icon" label="Ir a los cursos"
-                                        icon="pi pi-sign-in" />
+                                <div
+                                    class="d-flex flex-column flex-sm-row justify-content-center align-items-center w-100 mt-3 mt-sm-0">
+                                    <div v-if="authStore.getPermissions.length != 0"
+                                        class="col-sm-6 col-md-4 d-flex justify-content-center">
+                                        <Button class="fuente Button-manager custom-icon w-100" v-on:click="ViewManager"
+                                            label="Manager" icon="pi pi-crown" />
+                                    </div>
+
+                                    <div class="col-sm-6 col-md-4 d-flex justify-content-center mt-2 mt-sm-0">
+                                        <Button class="fuente Button-courses custom-icon w-100" label="Ir a los cursos"
+                                            icon="pi pi-sign-in" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -59,16 +60,19 @@
 
                 <td><br></td>
 
-                <div class="row col-md-8 col-sm-12 d-flex justify-content-between">
-                    <Card style="background-color: #f9f9f9;" class="row col-5">
+                <div class="row col-md-8 col-sm-12 d-flex user-information">
+                    <Card style="background-color: #f9f9f9;" class="row col-sm-12 col-md-5">
                         <template #content>
-                            <div class="col-12 d-flex justify-content-center align-items-center">
-                                <div class="col-12 text-left">
-                                    <label style="font-size: 25px; font-weight: bold; color: gray;"
+                            <div class="col-12 d-flex justify-content-between align-items-center">
+                                <div class="text-left">
+                                    <label style="font-size: 25px; font-weight: bold; color: #10312b;"
                                         class="fuente-titulo">
                                         Datos Personales
                                     </label>
                                 </div>
+                                <!-- Botón pegado a la derecha -->
+                                <Button v-on:click="ViewOptions" icon="pi pi-cog"
+                                    class="Button-config custom-icon .pi" />
                             </div>
 
                             <!-- Labels con iconos, cada uno en col-12 -->
@@ -114,19 +118,21 @@
                         </template>
                     </Card>
 
+                    <td class="separacion"><br></td>
+
                     <!-- Cuarta Card (ocupa 7 columnas) -->
-                    <Card style="background-color: #f9f9f9;" class="row col-7">
+                    <Card style="background-color: #f9f9f9;" class="row col-sm-12 col-md-7">
                         <template #content>
                             <!-- Contenedor para el título y el botón -->
                             <div class="col-12 d-flex justify-content-between align-items-center">
                                 <div class="text-left">
-                                    <label style="font-size: 25px; font-weight: bold; color: gray;"
+                                    <label style="font-size: 25px; font-weight: bold; color: #10312b;"
                                         class="fuente-titulo">
                                         Datos Laborales
                                     </label>
                                 </div>
                                 <!-- Botón pegado a la derecha -->
-                                <Button label="Editar mi información" icon="pi pi-cog"
+                                <Button v-on:click="ViewLaboralProfiles"  icon="pi pi-cog"
                                     class="Button-config custom-icon .pi" />
                             </div>
 
@@ -202,7 +208,6 @@ import { ref, onMounted } from "vue";
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import { handleGeneralError } from "@/errors/GeneralErrors";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import moment from 'moment';
@@ -233,6 +238,7 @@ const getInformationUser = async () => {
 
         if (response.status == 200) {
             userData.value = response.data;
+
             if (response.data.profile.genderName == "Hombre") {
                 genero.value = "Bienvenido"
             }
@@ -244,25 +250,46 @@ const getInformationUser = async () => {
                 genero.value = "Bienvenid@"
             }
 
-
-
             isLoading.value = false;
         }
     }
     catch (error) {
         isLoading.value = false;
-        handleGeneralError(error, router, authStore);
+        console.log(error);
+        if (error.status === 403) {
+            router.push(error.response.data.section);
+        }
+
+        if (error.status === 401) {
+            router.push('/login')
+        }
     }
 };
 
 const ViewManager = () => {
     router.push('/manager');
-}
+};
+
+const ViewOptions = () =>{
+    router.push('/user/ajustes');
+};
+
+const ViewLaboralProfiles = () => {
+    router.push('/user/laboral-profiles');
+};
 
 
 </script>
 
 <style>
+.user-information {
+    justify-content: space-between;
+}
+
+.separacion {
+    display: none;
+}
+
 .carta {
     margin-top: 50px;
     text-align: center;
@@ -305,7 +332,7 @@ const ViewManager = () => {
     border-radius: 15px;
     background-color: white !important;
     font-size: 15px;
-    color: #a57f2c;
+    color: #a57f2c !important;
     font-family: 'Noto Sans';
     transition: all 0.3s ease;
     font-weight: bold;
@@ -330,11 +357,8 @@ const ViewManager = () => {
 }
 
 .Button-config {
-    height: 50px;
+    height: 30px;
     border-radius: 15px;
-    font-size: 14px;
-    font-family: 'Noto Sans';
-    font-weight: bold;
     color: #98989A !important;
     border: 2px solid #98989A !important;
     background-color: white !important;
@@ -366,6 +390,22 @@ const ViewManager = () => {
 
     .contenedor-home {
         height: 100px;
+    }
+
+    .avatar {
+        display: none;
+    }
+
+    .linea {
+        display: none;
+    }
+
+    .user-information {
+        justify-content: center;
+    }
+
+    .separacion {
+        display: block;
     }
 }
 </style>

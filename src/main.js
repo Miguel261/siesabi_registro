@@ -20,6 +20,9 @@ import ColumnGroup from 'primevue/columngroup';
 import Row from 'primevue/row';
 import Dialog from 'primevue/dialog';
 import Card from 'primevue/card';
+import MultiSelect from 'primevue/multiselect';
+import Calendar from 'primevue/calendar';
+import Dropdown from 'primevue/dropdown';
 
 /* --- CONFIGURACIÓN DE PINIA (STORE) ADEMAS DE LA PERSISTENCIA DE DATOS ---*/
 
@@ -42,6 +45,9 @@ app.component('ColumnGroup', ColumnGroup);
 app.component('Row', Row);
 app.component('Dialog', Dialog);
 app.component('Card', Card);
+app.component('MultiSelect', MultiSelect);
+app.component('Calendar', Calendar);
+app.component('Dropdown', Dropdown);
 
 app.use(ToastService);
 

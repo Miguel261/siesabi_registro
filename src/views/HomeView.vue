@@ -22,7 +22,7 @@
                         </a>
                     </div>
                 </div>
-                <!-- Botón de siguiente -->
+           
                 <button class="carousel-control-next btn-c col-1" type="button" @click="handleNext">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
@@ -33,26 +33,26 @@
     <br><br><br>
 
     <div class="row cuadros col-12">
-        <div class="cuadro col-md-2 col-sm-10" v-on:click="getPrivateNotice">
+        <div class="cuadro col-12 col-md-10 col-lg-2" v-on:click="getPrivateNotice">
             <img src="/public/images/icons/Aviso.png" alt="">
-            <label class="fuente-cuadros" for="">Aviso de privacidad</label>
+            <label class="fuente-cuadros">Aviso de privacidad</label>
         </div>
-        <div class="cuadro col-md-2 col-sm-10" v-on:click="getEducationalOffer">
+        <div class="cuadro col-12 col-md-10 col-lg-2" v-on:click="getEducationalOffer">
             <img src="/public/images/icons/Catalogo.png" alt="">
-            <label class="fuente-cuadros" for="">Catálogo de Educación Continua y Permanente</label>
+            <label class="fuente-cuadros">Catálogo de Educación Continua y Permanente</label>
         </div>
-        <div class="cuadro col-md-2 col-sm-10" v-on:click="pushDirectory">
+        <div class="cuadro col-12 col-md-10 col-lg-2" v-on:click="pushDirectory">
             <img class="img-icons" src="/public/images/icons/Directorio.png" alt="">
-            <label class="fuente-cuadros" for="">Directorio</label>
+            <label class="fuente-cuadros">Directorio</label>
         </div>
-        <div class="cuadro col-md-2 col-sm-10" v-on:click="pushQuestions">
+        <div class="cuadro col-12 col-md-10 col-lg-2" v-on:click="pushQuestions">
             <img src="/public/images/icons/Preg Frec.png" alt="">
-            <label class="fuente-cuadros" for="">Preguntas frecuentes</label>
+            <label class="fuente-cuadros">Preguntas frecuentes</label>
         </div>
     </div>
 
     <div class="container-btn col-12">
-        <button class="button-green col-md-2 col-sm-6 fuente-cuadros" icon="pi pi-search">
+        <button class="button-green col-12 col-md-12 col-lg-2 fuente-cuadros" icon="pi pi-search">
             Buscar cursos
         </button>
     </div>
@@ -61,7 +61,7 @@
 
     <hr style="height: 1px; background-color: black;">
 
-    <div class="container-btn col-12">
+    <div class="container-btn">
         <div class="col-12">
             <button class="button-green col-md-12 col-sm-12 fuente-cuadros" icon="pi pi-search">
                 Seminarios Permanentes de Educación Continua
@@ -200,17 +200,20 @@ import Social from '@/components/template/SocialNetworks.vue';
 import { pdfView } from '@/components/resources/pdfView';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 
 const imagesBanner = ref([]);
 let interval;
 const currentIndex = ref(0);
 const router = useRouter();
 const url = import.meta.env.VITE_URL_HOST;
+const authStore = useAuthStore();
 
 onMounted(() => {
     getBanner();
     startInterval();
     setupScrollAnimation();
+    comfirmationLogin();
 });
 
 // Limpiar el intervalo cuando el componente se desmonta
@@ -251,9 +254,9 @@ const getBanner = async () => {
         if (response.status === 200 || response.status === 202) {
             return imagesBanner.value = response.data.results;
         }
-        
+
         getBannerStatic();
-        
+
     } catch (error) {
         console.error(error);
         getBannerStatic();
@@ -284,7 +287,6 @@ const stopInterval = () => {
     clearInterval(interval);
 };
 
-// Función para configurar la animación al hacer scroll
 const setupScrollAnimation = () => {
     const elementos = document.querySelectorAll('.container-circulo');
 
@@ -295,11 +297,10 @@ const setupScrollAnimation = () => {
             }
         });
     }, {
-        threshold: 0.1 // Activa la animación cuando el 10% del elemento es visible
+        threshold: 0.1
     });
 
     elementos.forEach((elemento, index) => {
-        // Añade un retraso a cada elemento para que aparezcan uno por uno
         elemento.style.transitionDelay = `${index * 0.1}s`;
         observer.observe(elemento);
     });
@@ -333,6 +334,23 @@ const pushDirectory = async () => {
 
 const pushQuestions = async () => {
     router.push('/questions');
+};
+
+const comfirmationLogin = async () => {
+    try {
+        const response = await axios.get(`${url}/api/user`, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getAccessToken}`
+            }
+        });
+
+        if (response.status == 200) {
+            router.push('/dashboard');
+        }
+    }
+    catch (error) {
+        authStore.clearTokens();
+    }
 };
 
 </script>

@@ -122,9 +122,14 @@
             <Column class="fuente" header="Opciones" headerClass="column-header" bodyClass="column-body"
                 headerStyle="width:5%;">
                 <template #body="slotProps">
-                    <Button icon="pi pi-cog" style="color: white; background-color: #611232; 
-                    border-color: #611232;" class=" p-button p-button-rounded p-button"
-                        @click="ViewBard(slotProps.data)" title="Ver modificaciones a este usuario" />
+                    <Button icon="pi pi-cog" style="color: white; background-color: #611232;
+                    border-color: #611232;" class="p-button-md p-button-rounded p-button custom-icon"
+                        @click="viewOptions($event, slotProps.data)" title="Opciones" />
+
+                    <OverlayPanel ref="overlayPanel" :dismissable="false">
+                        <span class="fuente" style="color: black; font-weight: bold;">Opciones</span>
+                        <Menu style="font-size: 13px;" class="fuente" ref="menuRef" :model="items" />
+                    </OverlayPanel>
                 </template>
             </Column>
         </DataTable>
@@ -146,6 +151,7 @@
 <script setup>
 import { ref } from "vue";
 import { useAuthStore } from '@/stores/auth';
+import { userStore } from "@/stores/user";
 import { handleGeneralError } from "@/errors/GeneralErrors";
 import { useRouter } from 'vue-router';
 import axios from 'axios';
@@ -153,26 +159,51 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import moment from 'moment';
 import { useToast } from "primevue/usetoast";
+import OverlayPanel from 'primevue/overlaypanel';
+import Menu from 'primevue/menu';
 
 const toast = useToast();
 const router = useRouter();
 
 const url = import.meta.env.VITE_URL_HOST;
 const authStore = useAuthStore();
+const userDataStore = userStore();
 
 const isLoading = ref(false);
 const usersSiesabi = ref(null);
+const overlayPanel = ref(null);
 
 const email = ref('');
 const curp = ref('');
 const name = ref('');
 
+const items = [
+    {
+        label: 'Información',
+        icon: 'pi pi-eye',
+        command: () => {
+            router.push('/admin/information');
+        }
+    },
+    {
+        label: 'Permisos',
+        icon: 'pi pi-shield',
+        command: () => {
+            router.push('/admin/permisos');
+        }
+    },
+];
+
+const viewOptions = (event, data) => {
+    overlayPanel.value.toggle(event);
+    userDataStore.setID(data.id);
+};
 
 const searchUser = () => {
     if (email.value === '' && curp.value === '' && name.value === '') {
         showToast();
     }
-    else{
+    else {
         SearchUserSiesabi();
     }
 
@@ -198,7 +229,7 @@ const showToastInfo = () => {
 
 const SearchUserSiesabi = async () => {
     try {
-        
+
         isLoading.value = true;
         const response = await axios.get(`${url}/api/user/all?curp=${curp.value}&email=${email.value}&name=${name.value}&limit=3000`, {
             headers: {

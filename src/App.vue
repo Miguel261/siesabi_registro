@@ -9,7 +9,7 @@ import Toast from 'primevue/toast';
 
 <template>
   <header>
-    <Toast class=" col-3 fuente" />
+    <Toast class=" col-md-3 col-sm-12 fuente" />
     <Navbar></Navbar>
     <NavbarSecundary></NavbarSecundary>
   </header>
@@ -20,6 +20,6 @@ import Toast from 'primevue/toast';
   <Footer></Footer>
 </template>
 
-<style scoped>
+<style>
 
 </style>

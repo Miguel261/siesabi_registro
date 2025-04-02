@@ -3,45 +3,50 @@
         <div class="container col-12">
             <!-- Nav Tabs -->
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
+                <li v-if="havePermissions('manager-users') || authStore.getRol == 'admin'" class="nav-item"
+                    role="presentation">
                     <button class="nav-link active fuente" id="users-tab" data-bs-toggle="tab" data-bs-target="#users"
                         type="button" role="tab" aria-controls="users" aria-selected="true">Usuarios</button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li v-if="havePermissions('manager-users-create') || authStore.getRol == 'admin'" class=" nav-item"
+                    role="presentation">
                     <button class="nav-link fuente" id="create-user-tab" data-bs-toggle="tab"
                         data-bs-target="#create-user" type="button" role="tab" aria-controls="create-user"
                         aria-selected="false">Crear
                         usuario</button>
                 </li>
-                <li class="nav-item" role="presentation">
+                <li v-if="havePermissions('manager-live-video') || authStore.getRol == 'admin'" class="nav-item"
+                    role="presentation">
                     <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
                         type="button" role="tab" aria-controls="video" aria-selected="false">Video en vivo</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
-                        type="button" role="tab" aria-controls="video" aria-selected="false">Banners</button>
+                <li v-if="havePermissions('manager-banners') || authStore.getRol == 'admin'" class="nav-item"
+                    role="presentation">
+                    <button class="nav-link fuente" id="banner-tab" data-bs-toggle="tab" data-bs-target="#banner"
+                        type="button" role="tab" aria-controls="banner" aria-selected="false">Banners</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
-                        type="button" role="tab" aria-controls="video" aria-selected="false">
+                <li v-if="havePermissions('manager-private-notice') || authStore.getRol == 'admin'" class="nav-item"
+                    role="presentation">
+                    <button class="nav-link fuente" id="privacity-notice-tab" data-bs-toggle="tab"
+                        data-bs-target="#privacity-notice" type="button" role="tab" aria-controls="privacity-notice"
+                        aria-selected="false">
                         Aviso de privacidad
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
-                        type="button" role="tab" aria-controls="video" aria-selected="false">
+                <li v-if="havePermissions('faq-edit') || authStore.getRol == 'admin'" class="nav-item"
+                    role="presentation">
+                    <button class="nav-link fuente" id="faq-tab" data-bs-toggle="tab" data-bs-target="#faq"
+                        type="button" role="tab" aria-controls="faq" aria-selected="false">
                         Faq
                     </button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
-                        type="button" role="tab" aria-controls="video" aria-selected="false">
+                <li v-if="havePermissions('manager-educatival-offer') || authStore.getRol == 'admin'" class="nav-item"
+                    role="presentation">
+                    <button class="nav-link fuente" id="educational-offer-tab" data-bs-toggle="tab"
+                        data-bs-target="#educational-offer" type="button" role="tab" aria-controls="educational-offer"
+                        aria-selected="false">
                         Oferta educativa
                     </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
-                        type="button" role="tab" aria-controls="video" aria-selected="false">Archivos</button>
                 </li>
             </ul>
 
@@ -58,24 +63,52 @@
                     <br><br>
                     <VideoVivo></VideoVivo>
                 </div>
+                <div class="tab-pane fade" id="banner" role="tabpanel" aria-labelledby="banner-tab">
+                    <br><br>
+                    <Banner></Banner>
+                </div>
+                <div class="tab-pane fade" id="privacity-notice" role="tabpanel" aria-labelledby="privacity-notice-tab">
+                    <br><br>
+                    <PrivacityNotice></PrivacityNotice>
+                </div>
+                <div class="tab-pane fade" id="educational-offer" role="tabpanel"
+                    aria-labelledby="educational-offer-tab">
+                    <br><br>
+                    <EducationalOffer></EducationalOffer>
+                </div>
+                <div class="tab-pane fade" id="faq" role="tabpanel" aria-labelledby="faq-tab">
+                    <br><br>
+                    <Faq />
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import Users from '@/components/manager/Users.vue';
+import Banner from '@/components/manager/Banner.vue'
 import CretaUsersCuvanos from '@/components/manager/CreateUsersCubanos.vue';
+import EducationalOffer from '@/components/manager/EducationalOffer.vue';
+import Faq from '@/components/manager/Faq.vue';
+import PrivacityNotice from '@/components/manager/PrivacityNotice.vue';
+import Users from '@/components/manager/Users.vue';
 import VideoVivo from '@/components/manager/VideoVivo.vue';
+import { ref, onMounted } from "vue";
 
-import { ref, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
 
+const permissions = ref(null);
+
 onMounted(() => {
     authStore.refreshTokenStore();
+    permissions.value = authStore.getPermissions;
 })
+
+const havePermissions = (permiso) => {
+    return Array.isArray(permissions.value) && permissions.value.includes(permiso);
+};
 
 
 </script>

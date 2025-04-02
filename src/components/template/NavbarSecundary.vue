@@ -78,6 +78,7 @@
             </div>
         </div>
     </nav>
+
 </template>
 
 <script setup>
@@ -128,7 +129,10 @@ const logout = async () => {
         }
 
     } catch (error) {
-        handleGeneralError(error, router, authStore);
+        if(error.status === 401){
+            authStore.clearTokens();
+            router.push('/login');
+        }
     }
 };
 

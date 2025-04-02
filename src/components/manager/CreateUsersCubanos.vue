@@ -19,7 +19,7 @@
             <div class="col-12 col-md-12 mt-3 mt-md-0">
                 <div class="d-flex flex-column flex-md-row justify-content-end align-items-center gap-2">
                     <!-- Input (span) -->
-                    <input type="email" class="col-md-3 col-sm-12 input-search fuente" placeholder="Correo electrónico"
+                    <input type="email" v-model="email" class="col-md-3 col-sm-12 input-search fuente" placeholder="Correo electrónico"
                         required>
 
                     <!-- Botón -->
@@ -49,46 +49,43 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useAuthStore } from '@/stores/auth';
 import { handleGeneralError } from "@/errors/GeneralErrors";
-import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 import axios from 'axios';
+import swal from 'sweetalert';
+import { ref } from "vue";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const url = import.meta.env.VITE_URL_HOST;
 const authStore = useAuthStore();
 
+const email = ref('');
 const isLoading = ref(false);
-const usersSiesabi = ref(null);
 
 const SearchUserSiesabi = async () => {
     try {
         isLoading.value = true;
-        const response = await axios.get(`${url}/api/user`, {
+        const response = await axios.post(`${url}/api/user/create-account-foreign`, {email: email.value}, {
             headers: {
                 'Authorization': `Bearer ${authStore.getAccessToken}`
             }
         });
 
-        if (response.status == 200) {
-            usersSiesabi.value = [
-                {
-                    'name': 'Miguel Angel Figueroa Fajardo',
-                    'curp': 'FIFM961026HGRGJG04',
-                    'email': 'miguel.angel.figueroa.fajardo@gmail.com',
-                    'data_personal': 'Completados',
-                    'data_laboral': 'Completados',
-                    'cuenta_moodle': 'Existe',
-                    'date': '03/06/2024',
-                    'verify': '15/01/2025',
-                    'old_update': 'hace 4 semanas',
-                }
-            ]
+        if (response.status == 201) {
+            swal({
+                title: `Cuenta creada correctamente`,
+                text: `
+                    Correo: ${response.data.email}
+                    Contraseña: ${response.data.password}`,
+                icon: 'success'
+            })
+            email.value = ""
             isLoading.value = false;
         }
+
     }
     catch (error) {
         isLoading.value = false;

@@ -11,15 +11,15 @@
                 <div class="d-flex flex-column flex-md-row 
                     justify-content-center justify-content-md-end align-items-center gap-2">
                     <!-- Input (span) -->
-                    <input type="email" v-model="email" class="col-md-5 col-sm-12 input-search fuente"
+                    <input type="email" v-model="email" class="col-md-6 col-sm-12 input-search fuente"
                         placeholder="Buscar por email" required>
 
-                    <input type="text" v-model="curp" class="col-md-5 col-sm-12 input-search fuente"
+                    <input type="text" v-model="curp" class="col-md-6 col-sm-12 input-search fuente"
                         placeholder="Buscar por curp" required>
 
                     <!-- Botón -->
                     <Button style="height: 44px; color: white; background-color: #611232;"
-                        class="col-md-2 col-sm-12  Button-manager custom-icon" @click="getUser()" label="Buscar"
+                        class="col-md-3 col-sm-12  Button-manager custom-icon" @click="getUser()" label="Buscar"
                         icon="pi pi-search" />
                 </div>
             </div>
@@ -115,7 +115,7 @@
                 headerStyle="width:1%;">
                 <template #body="slotProps">
                     <Button v-if="slotProps.data.changes.length > 0" icon="pi pi-eye" style="color: white; font-size: 15px; background-color: #611232;
-                    border-color: #611232;" class=" p-button-md p-button-rounded p-button mr-3"
+                    border-color: #611232;" class=" p-button-md p-button-rounded p-button mr-3 custom-icon"
                         @click="ViewChange(slotProps.data)" title="Ver modificaciones a este usuario" />
                 </template>
             </Column>
@@ -123,7 +123,7 @@
                 headerStyle="width:1%;">
                 <template #body="slotProps">
                     <Button icon="pi pi-cog" style="color: white; background-color: #a57f2c;
-                    border-color: #a57f2c;" class="p-button-md p-button-rounded p-button"
+                    border-color: #a57f2c;" class="p-button-md p-button-rounded p-button custom-icon"
                         @click="viewOptions($event, slotProps.data)" title="Opciones" />
 
                     <OverlayPanel ref="overlayPanel" :dismissable="false">
@@ -188,8 +188,8 @@
             <label for="">{{ userData.email }}</label>
         </span>
 
-        <input type="email" v-model="newEmail" class="col-12 input-search fuente" placeholder="Ingresa el correo electrónico"
-            required>
+        <input type="email" v-model="newEmail" class="col-12 input-search fuente"
+            placeholder="Ingresa el correo electrónico" required>
 
         <br><br>
 
@@ -276,9 +276,18 @@ const showEmail = () => {
 
 const showMoodle = () => {
     toast.add({
-        severity: 'info',
+        severity: 'warn',
         summary: 'Información',
         detail: `Ya existe cuenta de moodle`,
+        life: 2000
+    });
+};
+
+const showLowerCase = () => {
+    toast.add({
+        severity: 'warn',
+        summary: 'Información',
+        detail: `El correo ya esta en minúsculas`,
         life: 2000
     });
 };
@@ -359,7 +368,7 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
-const changeEmail = async () =>{
+const changeEmail = async () => {
     if (isValidEmail(newEmail.value)) {
         try {
             isLoading.value = true;
@@ -385,7 +394,7 @@ const changeEmail = async () =>{
     }
 };
 
-const confirmUpdatePassword = async () =>{
+const confirmUpdatePassword = async () => {
     const userConfirmation = await swal({
         title: "Generación de Contraseña Temporal",
         text: "¿Seguro que deseas actualizar la contraseña por una temporal?",
@@ -403,17 +412,30 @@ const confirmUpdatePassword = async () =>{
     }
 }
 
-const updatePAssword = async () =>{
-    try{
+const updatePAssword = async () => {
+    try {
         const response = await axios.put(`${url}/api/user/${userData.value.id}/refresh-password`, {}, {
             headers: {
                 'Authorization': `Bearer ${authStore.getAccessToken}`
             }
         });
 
-        if(response.status == 200){
-            showSuccess(response.data.message);
-            console.log(response.data);
+        if (response.status == 200) {
+            swal("Se actualizo la contraseña correctamente!", {
+                icon: "success",
+                title: "Éxito!",
+                buttons: "Copiar",
+                text: "La Contraseña es: " + response.data.password,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+
+            })
+                .then(async (Copiar) => {
+                    if (Copiar) {
+                        await navigator.clipboard.writeText(response.data.password);
+                    }
+                });
+
             isLoading.value = false;
         }
     }
@@ -441,7 +463,44 @@ const confirmGenerateMoodle = async () => {
     }
 }
 
-const generateMoodle = async () =>{
+const updateEmailToLowerCase = async () => {
+    isLoading.value = true;
+    try {
+        const response = await axios.put(`${url}/api/user/${userData.value.id}/update-email-to-lower-case`, {}, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getAccessToken}`
+            }
+        });
+
+        if (response.status == 200) {
+            isLoading.value = false;
+            swal("Se actualizo el correo correctamente!", {
+                icon: "success",
+                title: "Éxito!",
+                buttons: "Ok",
+                text: "La Contraseña es: " + response.data.password,
+                closeOnClickOutside: false,
+                closeOnEsc: false,
+
+            })
+                .then(() => {
+                    SearchUserSiesabi();
+                });
+        }
+    }
+    catch (error) {
+        isLoading.value = false;
+        
+        if(error.status === 412){
+            showLowerCase();
+            return;
+        }
+
+        showError(error.status);
+    }
+}
+
+const generateMoodle = async () => {
     try {
         const response = await axios.put(`${url}/api/user/${userData.value.id}/generate-moodle-account`, {}, {
             headers: {
@@ -500,7 +559,7 @@ const items = [
         label: 'Correo a minúsculas',
         icon: 'pi pi-pencil',
         command: () => {
-
+            updateEmailToLowerCase()
         }
     },
     {

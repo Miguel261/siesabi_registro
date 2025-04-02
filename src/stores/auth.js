@@ -8,18 +8,21 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     accessToken: null,
     refreshToken: null,
-    rol: null
+    rol: null,
+    permissions: null
   }),
   actions: {
-    setTokens(accessToken, refreshToken, role) {
+    setTokens(accessToken, refreshToken, role, permissions) {
       this.accessToken = accessToken;
       this.refreshToken = refreshToken;
       this.rol = role;
+      this.permissions = permissions;
     },
     clearTokens() {
       this.accessToken = null;
       this.refreshToken = null;
       this.rol = null;
+      this.permissions = null;
     },
     async refreshTokenStore() {
       const router = useRouter();
@@ -31,7 +34,7 @@ export const useAuthStore = defineStore('auth', {
         });
 
         if (response.status == 201) {
-          this.setTokens(response.data.accessToken, response.data.refreshToken, response.data.roles[0]);
+          this.setTokens(response.data.accessToken, response.data.refreshToken, response.data.roles[0], response.data.permissions);
         }
       } catch (error) {
         console.log(error);
@@ -44,6 +47,7 @@ export const useAuthStore = defineStore('auth', {
     getAccessToken: (state) => state.accessToken,
     getRefreshToken: (state) => state.refreshToken,
     getRol: (state) => state.rol,
+    getPermissions: (state) => state.permissions,
     isAuthenticated: (state) => !!state.accessToken,
   },
   persist: {
