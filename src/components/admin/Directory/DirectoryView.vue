@@ -59,16 +59,17 @@
                         <Button icon="pi pi-arrow-down"
                             style="color: white; background-color: #611232; border-color: #611232;"
                             class="p-button-md p-button-rounded p-button custom-icon"
-                            @click="ViewContent(slotProps.data)" title="Ver" />
+                            @click="ViewContent(slotProps.data)" title="Desplegar" />
 
                         <Button icon="pi pi-file-edit"
                             style="color: white; background-color: #a57f2c; border-color: #a57f2c;"
                             class="p-button-md p-button-rounded p-button custom-icon"
-                            @click="ModalDirectory(slotProps.data)" title="Ver" />
+                            @click="ModalDirectory(slotProps.data)" title="Editar" />
 
                         <Button icon="pi pi-trash"
                             style="color: white; background-color: #161a1d; border-color: #161a1d;"
-                            class="p-button-md p-button-rounded p-button custom-icon" @click="" title="Ver" />
+                            class="p-button-md p-button-rounded p-button custom-icon"
+                            @click="ConfirmDelteDirectory(slotProps.data)" title="Eliminar" />
 
                     </div>
                 </template>
@@ -101,13 +102,13 @@
                                 <div style="display: flex; gap: 10px;">
                                     <Button icon="pi pi-file-edit"
                                         style="color: white; background-color: #611232; border-color: #611232;"
-                                        class="p-button-md p-button-rounded p-button custom-icon" 
-                                        @click="ModalPeople(slotProps.data)"
-                                        title="Ver" />
+                                        class="p-button-md p-button-rounded p-button custom-icon"
+                                        @click="ModalPeople(slotProps.data)" title="Ver" />
 
                                     <Button icon="pi pi-trash"
                                         style="color: white; background-color: #a57f2c; border-color: #a57f2c;"
-                                        class="p-button-md p-button-rounded p-button custom-icon" @click=""
+                                        class="p-button-md p-button-rounded p-button custom-icon" 
+                                        @click="ConfirmDeletePeople(slotProps.data)"
                                         title="Ver" />
 
                                 </div>
@@ -157,7 +158,7 @@
             <div class="flex align-items-center gap-3 mb-3">
                 <label class="fuente w-6rem">Email</label>
                 <br>
-                <input type="text" v-model="emialPeople" class="col-md-12 col-sm-12 input-search fuente" required>
+                <input type="text" v-model="emailPeople" class="col-md-12 col-sm-12 input-search fuente" required>
             </div>
 
             <div class="d-flex justify-content-center">
@@ -168,7 +169,8 @@
                     </div>
                     <td class="td"><br></td>
                     <div class="col-md-6 col-sm-6">
-                        <Button type="button" label="Actualizar" @click="" class="Button-manager w-100"></Button>
+                        <Button type="button" label="Actualizar" @click="ConfirmUpdatedPeople()"
+                            class="Button-manager w-100"></Button>
                     </div>
                 </div>
             </div>
@@ -204,13 +206,13 @@ const idDirectory = ref(null);
 const idPeople = ref(null);
 const namePeople = ref(null);
 const puestoPeople = ref(null);
-const emialPeople = ref(null);
+const emailPeople = ref(null);
+const dataPeople = ref(null);
 
 const config = {
     headers: { 'Authorization': `Bearer ${authStore.getAccessToken}` }
 }
 onMounted(async () => {
-    authStore.refreshToken;
     await getDirectory();
 });
 
@@ -220,7 +222,7 @@ const getDirectory = async () => {
         directory.value = response.data.results;
     }
     catch (error) {
-        if(error.status == 401){
+        if (error.status == 401) {
             router.push('/login');
         }
     }
@@ -280,7 +282,7 @@ const updateOrderPeople = async (peopleList, directoryId) => {
         }));
 
         await axios.put(`${url}/api/directory/${directoryId}/people/order`,
-            { faqs: payload }, 
+            { faqs: payload },
             config
         );
 
@@ -323,22 +325,22 @@ const ViewContent = async (data) => {
     }
 };
 
-const ModalDirectory = async (data) =>{
+const ModalDirectory = async (data) => {
     visible.value = true;
     nameDirectory.value = data.name;
     idDirectory.value = data.id
 };
 
-const ModalPeople = async (data) =>{
-    console.log(data)
+const ModalPeople = async (data) => {
     visible2.value = true;
     idPeople.value = data.id;
     namePeople.value = data.name;
     puestoPeople.value = data.position;
-    emialPeople.value = data.public_email;
+    emailPeople.value = data.public_email;
+    dataPeople.value = data;
 };
 
-const ConfirmUpdateDirectory = async (data) =>{
+const ConfirmUpdateDirectory = async () => {
     const userConfirmation = await swal({
         title: "Actualizar directorio",
         text: "¿Seguro deseas actualizar el nombre de este directorio?",
@@ -351,19 +353,19 @@ const ConfirmUpdateDirectory = async (data) =>{
     });
 
     if (userConfirmation) {
-        if (nameDirectory.value != '' || nameDirectory.value != null){
+        if (nameDirectory.value != '' || nameDirectory.value != null) {
             UpdateDirectory()
         }
     }
 };
 
-const UpdateDirectory = async () =>{
-    try{
-        const response = await axios.put(`${url}/api/directory/${idDirectory.value}/update`,{
+const UpdateDirectory = async () => {
+    try {
+        const response = await axios.put(`${url}/api/directory/${idDirectory.value}/update`, {
             name: nameDirectory.value
         }, config);
 
-        if(response.status == 200){
+        if (response.status == 200) {
             toast.add({
                 severity: 'success',
                 summary: 'Exito',
@@ -375,11 +377,150 @@ const UpdateDirectory = async () =>{
             getDirectory();
         }
     }
-    catch(error){
+    catch (error) {
         toast.add({
             severity: 'error',
             summary: 'Error',
             detail: `Error al actualizar el nombre del directorio`,
+            life: 2000
+        });
+    }
+};
+
+const ConfirmUpdatedPeople = async () => {
+    const userConfirmation = await swal({
+        title: "Actualizar persona",
+        text: "¿Seguro deseas actualizar la información de esta persona?",
+        icon: "warning",
+        buttons: {
+            cancel: "No",
+            confirm: "Sí",
+        },
+        dangerMode: true,
+    });
+
+    if (userConfirmation) {
+        UpdatePeople()
+    }
+};
+
+const UpdatePeople = async () => {
+    try {
+
+        const response = await axios.put(`${url}/api/directory/1/people/${idPeople.value}/update`, {
+            name: namePeople.value,
+            position: puestoPeople.value,
+            email: emailPeople.value
+        }, config);
+
+        if (response.status == 200) {
+            toast.add({
+                severity: 'success',
+                summary: 'Exito',
+                detail: `Los datos de la persona fueron actualizados con exito`,
+                life: 2000
+            });
+
+            visible2.value = false;
+            window.location.reload();
+        }
+    }
+    catch (error) {
+        console.log(error);
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Error al actualizar información de esta persona`,
+            life: 2000
+        });
+    }
+};
+
+const ConfirmDelteDirectory = async (data) => {
+    const userConfirmation = await swal({
+        title: "Eliminar directorio",
+        text: "¿Seguro deseas eliminar este directorio?",
+        icon: "warning",
+        buttons: {
+            cancel: "No",
+            confirm: "Sí",
+        },
+        dangerMode: true,
+    });
+
+    if (userConfirmation) {
+        DeleteDirectory(data);
+    }
+};
+
+const DeleteDirectory = async (data) =>{
+    try {
+
+        const response = await axios.delete(`${url}/api/directory/${data.id}`, config);
+
+        if (response.status == 200) {
+            toast.add({
+                severity: 'success',
+                summary: 'Exito',
+                detail: `El directorio fue eliminado con exito`,
+                life: 2000
+            });
+
+            visible2.value = false;
+            getDirectory();
+        }
+    }
+    catch (error) {
+        console.log(error);
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Error al eliminar el directorio`,
+            life: 2000
+        });
+    }
+};
+
+const ConfirmDeletePeople = async (data) => {
+    const userConfirmation = await swal({
+        title: "Eliminar persona",
+        text: "¿Seguro deseas eliminar esta persona?",
+        icon: "warning",
+        buttons: {
+            cancel: "No",
+            confirm: "Sí",
+        },
+        dangerMode: true,
+    });
+
+    if (userConfirmation) {
+        DeletePeople(data);
+    }
+};
+
+const DeletePeople = async (data) => {
+    try {
+
+        const response = await axios.delete(`${url}/api/directory/1/people/${data.id}`, config);
+
+        if (response.status == 200) {
+            toast.add({
+                severity: 'success',
+                summary: 'Exito',
+                detail: `La persona fue eliminada con exito`,
+                life: 2000
+            });
+
+            visible2.value = false;
+            window.location.reload();
+        }
+    }
+    catch (error) {
+        console.log(error);
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Error al eliminar esta persona`,
             life: 2000
         });
     }

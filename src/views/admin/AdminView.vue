@@ -21,9 +21,9 @@
                         v-on:click="manager" aria-selected="false">Manager</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
-                        type="button" role="tab" aria-controls="video" aria-selected="false">
-                        Clues</button>
+                    <button class="nav-link fuente" id="clues-tab" data-bs-toggle="tab" data-bs-target="#clues"
+                        type="button" role="tab" aria-controls="video" aria-selected="false" 
+                        v-on:click="clues">Clues</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link fuente" id="credentials-tab" data-bs-toggle="tab"
@@ -46,10 +46,7 @@
                     <br><br>
 
                 </div>
-                <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
-                    <br><br>
-
-                </div>
+                
                 <div class="tab-pane fade" id="credentials" role="tabpanel" aria-labelledby="credentials-tab">
                     <br><br>
                     <CredentialsView></CredentialsView>
@@ -63,19 +60,23 @@
 import Users from '@/components/admin/Users.vue';
 import CredentialsView from '@/components/admin/CredentialsView.vue';
 import DirectoryView from '@/components/admin/Directory/DirectoryView.vue';
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const authStore = useAuthStore();
 
-onMounted(() => {
-    authStore.refreshTokenStore();
+onMounted(async () => {
+    await authStore.refreshTokenStore();
 })
 
 const manager = () =>{
-    router.push('/manager')
+    router.push('/manager');
+};
+
+const clues = () =>{
+    router.push('/clues');
 };
 
 

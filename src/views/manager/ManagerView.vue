@@ -101,8 +101,8 @@ const authStore = useAuthStore();
 
 const permissions = ref(null);
 
-onMounted(() => {
-    authStore.refreshTokenStore();
+onMounted(async () => {
+    await authStore.refreshTokenStore();
     permissions.value = authStore.getPermissions;
 })
 

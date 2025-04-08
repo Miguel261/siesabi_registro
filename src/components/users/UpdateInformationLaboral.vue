@@ -407,7 +407,6 @@ const getInformationUser = async () => {
 
         isLoading.value = false;
         name.value = response.data.name;
-        console.log(response.data)
 
         if (response.data.laboral.countryId == 42) {
             formData.value.pais = paisOptions.find(g => g.code === 42);

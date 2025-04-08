@@ -14,6 +14,7 @@ import informationUserAdminVue from '@/components/admin/information/InformationU
 import permisosUserAdminVue from '@/components/admin/permisos/PermisosUserAdmin.vue'
 import userOptionsVue from '@/views/user/userOptions.vue'
 import UpdateInformationLaboralVue from '@/components/users/UpdateInformationLaboral.vue'
+import CluesViewVue from '@/views/clues/CluesView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -53,6 +54,12 @@ const router = createRouter({
       path: '/manager',
       name: 'manager',
       component: Manager,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/clues',
+      name: 'clues',
+      component: CluesViewVue,
       meta: { requiresAuth: true },
     },
     {

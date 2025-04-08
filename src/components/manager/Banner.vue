@@ -121,7 +121,6 @@ const formVisible = ref([])
 const file = ref({})
 
 onMounted(async () => {
-     authStore.refreshToken
      await getAllBanners()
 })
 

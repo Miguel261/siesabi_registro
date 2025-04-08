@@ -48,7 +48,7 @@
                                             label="Manager" icon="pi pi-crown" />
                                     </div>
 
-                                    <div class="col-sm-6 col-md-4 d-flex justify-content-center mt-2 mt-sm-0">
+                                    <div class="col-sm-6 col-md-5 d-flex justify-content-center mt-2 mt-sm-0">
                                         <Button class="fuente Button-courses custom-icon w-100" label="Ir a los cursos"
                                             icon="pi pi-sign-in" />
                                     </div>
@@ -214,10 +214,10 @@ import moment from 'moment';
 
 const isLoading = ref(false);
 
-onMounted(() => {
+onMounted(async () => {
+    await authStore.refreshTokenStore();
     isLoading.value = true;
     getInformationUser();
-    authStore.refreshTokenStore();
 });
 
 const url = import.meta.env.VITE_URL_HOST;

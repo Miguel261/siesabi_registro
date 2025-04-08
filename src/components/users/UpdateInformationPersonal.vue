@@ -119,7 +119,6 @@ const genero = ref('');
 
 onMounted(async () => {
     await getInformationUser();
-    authStore.refreshTokenStore();
 });
 
 const isLoading = ref(false);

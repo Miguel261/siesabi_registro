@@ -77,8 +77,8 @@ import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 const router = useRouter();
 
-onMounted(() => {
-    authStore.refreshTokenStore();
+onMounted(async () => {
+    await authStore.refreshTokenStore();
 });
 
 const ReturnPage = () =>{

@@ -292,7 +292,6 @@ const config = {
 }
 
 onMounted(async () => {
-     authStore.refreshToken
      await getAllFaqs()
 })
 

@@ -321,7 +321,6 @@ const isLoading = ref(false);
 onMounted(async () => {
     await getInformationUser();
     getData();
-    authStore.refreshTokenStore();
 });
 
 const url = import.meta.env.VITE_URL_HOST;

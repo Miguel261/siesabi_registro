@@ -160,7 +160,6 @@ const isLoading = ref(false);
 onMounted(() => {
     isLoading.value = true;
     getInformationUser();
-    authStore.refreshTokenStore();
 });
 
 const url = import.meta.env.VITE_URL_HOST;

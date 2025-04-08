@@ -122,7 +122,6 @@ const checked = ref(false);
 onMounted(() => {
     isLoading.value = true;
     getInformationUser();
-    authStore.refreshTokenStore();
 });
 
 const getInformationUser = async () => {

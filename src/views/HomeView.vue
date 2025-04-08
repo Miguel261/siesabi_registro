@@ -22,7 +22,7 @@
                         </a>
                     </div>
                 </div>
-           
+
                 <button class="carousel-control-next btn-c col-1" type="button" @click="handleNext">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
@@ -186,6 +186,16 @@
             </div>
             <label class="fuente-seminarios ">Gestión Directiva y Economía de la Salud</label>
         </div>
+
+        <div v-if="videoData" class="video-container">
+            <div class="video-close"></div>
+            <iframe width="300" height="169" :src="videoData.src" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+            <div class="video-title">{{ videoData.title }}</div>
+        </div>
+
     </div>
 
     <br><br>
@@ -208,18 +218,34 @@ const currentIndex = ref(0);
 const router = useRouter();
 const url = import.meta.env.VITE_URL_HOST;
 const authStore = useAuthStore();
+const videoData = ref(null);
 
-onMounted(() => {
-    getBanner();
+onMounted(async () => {
+    await getBanner();
+    await getVideo();
     startInterval();
     setupScrollAnimation();
-    comfirmationLogin();
+    await comfirmationLogin();
 });
 
 // Limpiar el intervalo cuando el componente se desmonta
 onUnmounted(() => {
     clearInterval(interval);
 });
+
+const getVideo = async () => {
+    try {
+        const response = await axios.get(`${url}/api/live`);
+
+        if (response.status === 200 && response.data.is_enabled) {
+            videoData.value = response.data;
+        }
+    } catch (error) {
+        if (error.response?.status !== 404) {
+            console.log(error);
+        }
+    }
+};
 
 const getBannerStatic = () => {
     imagesBanner.value = [
@@ -568,6 +594,39 @@ const comfirmationLogin = async () => {
     margin-top: 10px;
     font-size: 15px;
     font-family: 'Noto Sans';
+    font-weight: bold;
+}
+
+.video-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 321px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 10px;
+}
+
+.video-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+    z-index: 1001;
+}
+
+.video-close:hover {
+    color: #000;
+}
+
+.video-title {
+    margin-top: 8px;
+    font-size: 14px;
+    text-align: center;
     font-weight: bold;
 }
 
