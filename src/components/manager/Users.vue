@@ -222,6 +222,7 @@ import { useToast } from "primevue/usetoast";
 import moment from 'moment';
 import OverlayPanel from 'primevue/overlaypanel';
 import Menu from 'primevue/menu';
+import { MannagerError } from '@/errors/MannagerErros';
 
 const toast = useToast();
 const router = useRouter();
@@ -297,15 +298,6 @@ const showSuccess = (message) => {
         severity: 'success',
         summary: 'Exito',
         detail: `${message}`,
-        life: 2000
-    });
-};
-
-const showError = (status) => {
-    toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: `Ocurrio un error con un codigo: ${status}`,
         life: 2000
     });
 };
@@ -386,7 +378,7 @@ const changeEmail = async () => {
             }
         } catch (error) {
             isLoading.value = false;
-            showError(error.status);
+            MannagerError(error, router, authStore, toast);
         }
     } else {
         showEmail();
@@ -441,7 +433,7 @@ const updatePAssword = async () => {
     }
     catch (error) {
         isLoading.value = false;
-        showError(error.status);
+        MannagerError(error, router, authStore, toast);
     }
 }
 
@@ -496,7 +488,7 @@ const updateEmailToLowerCase = async () => {
             return;
         }
 
-        showError(error.status);
+        MannagerError(error, router, authStore, toast);
     }
 }
 
@@ -522,7 +514,7 @@ const generateMoodle = async () => {
             return;
         }
         isLoading.value = false;
-        showError(error.status);
+        MannagerError(error, router, authStore, toast);
     }
 };
 
@@ -570,9 +562,6 @@ const items = [
         }
     }
 ];
-
-
-
 
 </script>
 

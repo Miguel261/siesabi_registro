@@ -193,7 +193,9 @@
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
             </iframe>
-            <div class="video-title">{{ videoData.title }}</div>
+            <div class="video-title">
+                <a :href="videoData.link" target="_blank">{{ videoData.title }}</a>
+            </div>
         </div>
 
     </div>
@@ -239,6 +241,7 @@ const getVideo = async () => {
 
         if (response.status === 200 && response.data.is_enabled) {
             videoData.value = response.data;
+            console.log(videoData.value)
         }
     } catch (error) {
         if (error.response?.status !== 404) {

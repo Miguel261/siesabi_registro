@@ -160,7 +160,7 @@ const saveUserProfiles = async () => {
             }
 
             try {
-                const response = await axios.post(`${url}/api/register/user-profile`, {
+                await axios.post(`${url}/api/register/user-profile`, {
                     "name": formData.name.toUpperCase(),
                     "first_name": formData.first_name.toUpperCase(),
                     "last_name": formData.last_name.toUpperCase(),
@@ -204,7 +204,7 @@ const saveUserProfiles = async () => {
 
 const getInformationUser = async () => {
     try {
-        const response = await axios.get(`${url}/api/user`, {
+        await axios.get(`${url}/api/user`, {
             headers: {
                 'Authorization': `Bearer ${authStore.getAccessToken}`
             }

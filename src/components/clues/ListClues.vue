@@ -86,6 +86,7 @@ import { useToast } from "primevue/usetoast";
 import { useRouter } from 'vue-router';
 import InputText from 'primevue/inputtext';
 import MultiSelect from 'primevue/multiselect';
+import { MannagerError } from '@/errors/MannagerErros';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -118,13 +119,7 @@ const getState = async () => {
         states.value = response.data;
     }
     catch (error) {
-        toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Error al hacer la petición al servidor Codigo: ${error.status}`,
-            life: 2000
-        });
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 
@@ -146,13 +141,7 @@ const getClues = async (clues) => {
         cluesValues.value = response.data;
     }
     catch (error) {
-        toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Error al hacer la petición al servidor Codigo: ${error.status}`,
-            life: 2000
-        });
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 

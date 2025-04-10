@@ -188,6 +188,7 @@ import moment from 'moment';
 import { useToast } from "primevue/usetoast";
 import { useRouter } from 'vue-router';
 import Dialog from 'primevue/dialog';
+import { MannagerError } from '@/errors/MannagerErros';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -250,8 +251,7 @@ const updateOrderDirectory = async (reorderDirectory) => {
 
         toast.add({ severity: 'success', summary: 'Orden guardado', life: 3000 });
     } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error al guardar el orden', detail: error.message, life: 5000 });
-        console.log(error)
+        MannagerError(error, router, authStore, toast);
     }
 };
 
@@ -292,13 +292,7 @@ const updateOrderPeople = async (peopleList, directoryId) => {
             life: 3000
         });
     } catch (error) {
-        toast.add({
-            severity: 'error',
-            summary: 'Error al guardar el orden',
-            detail: error.message,
-            life: 5000
-        });
-        console.error("Error updating people order:", error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 
@@ -321,7 +315,7 @@ const ViewContent = async (data) => {
 
         expandedRows.value = [...expanded, data];
     } catch (error) {
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 
@@ -426,13 +420,7 @@ const UpdatePeople = async () => {
         }
     }
     catch (error) {
-        console.log(error);
-        toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Error al actualizar información de esta persona`,
-            life: 2000
-        });
+        MannagerError(error, router, authStore, toast);
     }
 };
 
@@ -471,13 +459,7 @@ const DeleteDirectory = async (data) =>{
         }
     }
     catch (error) {
-        console.log(error);
-        toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Error al eliminar el directorio`,
-            life: 2000
-        });
+        MannagerError(error, router, authStore, toast);
     }
 };
 
@@ -516,13 +498,7 @@ const DeletePeople = async (data) => {
         }
     }
     catch (error) {
-        console.log(error);
-        toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Error al eliminar esta persona`,
-            life: 2000
-        });
+        MannagerError(error, router, authStore, toast);
     }
 };
 

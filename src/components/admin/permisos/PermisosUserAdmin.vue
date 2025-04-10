@@ -110,7 +110,8 @@
                                 <label class="fuente" for="size_normal">CIFRAS</label>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.cifras" :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.cifras" :binary="true" class="mr-4"
+                                        v-on:change="UpdatePermission(2, userPermissions.cifras)" />
                                     <label for="size_normal">Aceso a CIFRAS</label>
                                 </div>
 
@@ -119,52 +120,65 @@
                                 <label class="fuente" for="size_normal">Manager</label>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.userMagger" :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.userMagger"
+                                        v-on:change="UpdatePermission(8, userPermissions.userMagger)" 
+                                        :binary="true" class="mr-4" />
                                     <label for="size_normal">Usuarios</label>
                                 </div>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.crateUser" :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.crateUser"
+                                        v-on:change="UpdatePermission(9, userPermissions.crateUser)" :binary="true"
+                                        class="mr-4" />
                                     <label for="size_normal">Crear usuarios</label>
                                 </div>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.video" :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.video"
+                                        v-on:change="UpdatePermission(11, userPermissions.video)" :binary="true"
+                                        class="mr-4" />
                                     <label for="size_normal">Video en vivo</label>
                                 </div>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.banners" :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.banners"
+                                        v-on:change="UpdatePermission(12, userPermissions.banners)" :binary="true"
+                                        class="mr-4" />
                                     <label for="size_normal">Banners</label>
                                 </div>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.editFaq" :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.editFaq"
+                                        v-on:change="UpdatePermission(7, userPermissions.editFaq)" :binary="true"
+                                        class="mr-4" />
                                     <label for="size_normal">Editar preguntas frecuentes (FAQ)</label>
                                 </div>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.editOferta" :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.editOferta"
+                                        v-on:change="UpdatePermission(25, userPermissions.editOferta)" :binary="true"
+                                        class="mr-4" />
                                     <label for="size_normal">Editar oferta educativa</label>
                                 </div>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.editAviso" :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.editAviso"
+                                        v-on:change="UpdatePermission(26, userPermissions.editAviso)" :binary="true"
+                                        class="mr-4" />
                                     <label for="size_normal">Editar aviso de privacidad</label>
                                 </div>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.editClues" :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.editClues"
+                                        v-on:change="UpdatePermission(28, userPermissions.editClues)" :binary="true"
+                                        class="mr-4" />
                                     <label for="size_normal">Editar CLUES</label>
                                 </div>
 
                                 <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.apiKey" :binary="true" class="mr-4" />
-                                    <label for="size_normal">Generar/Editar API KEY</label>
-                                </div>
-
-                                <div class="fuente justify-content-center">
-                                    <Checkbox v-model="userPermissions.editDirectorio  " :binary="true" class="mr-4" />
+                                    <Checkbox v-model="userPermissions.editDirectorio"
+                                        v-on:change="UpdatePermission(30, userPermissions.editDirectorio)"
+                                        :binary="true" class="mr-4" />
                                     <label for="size_normal">Editar directorio</label>
                                 </div>
 
@@ -188,6 +202,8 @@ import { userStore } from "@/stores/user";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import Checkbox from 'primevue/checkbox'
+import { useToast } from "primevue/usetoast";
+import { MannagerError } from '@/errors/MannagerErros';
 
 const isLoading = ref(false);
 
@@ -203,22 +219,53 @@ const url = import.meta.env.VITE_URL_HOST;
 const authStore = useAuthStore();
 const userDataStore = userStore();
 const router = useRouter();
+const toast = useToast();
 
 const userData = ref(null);
 const permissions = ref([]);
 
+const config = {
+    headers: { 'Authorization': `Bearer ${authStore.getAccessToken}` }
+}
+
+const UpdatePermission = async (id, value) => {
+    try {
+        if (value == true) {
+            const give = await axios.post(`${url}/api/user/give-permission-to`, {
+                user_id: parseInt(userData.value.id),
+                permission_id: parseInt(id)
+            }, config);
+
+            toast.add({ severity: 'success', summary: `${give.data.message}`, life: 3000 });
+
+        }
+        else {
+            const revoke = await axios.post(`${url}/api/user/revoke-permission`, {
+                user_id: parseInt(userData.value.id),
+                permission_id: parseInt(id)
+            }, config);
+
+            toast.add({ severity: 'success', summary: `${revoke.data.message}`, life: 3000 });
+
+        }
+    }
+    catch (error) {
+        MannagerError(error, router, authStore, toast);
+    }
+}
+
+
 const userPermissions = ref({
-    cifras: false,
-    userMagger: false,
-    crateUser: false,
-    video: false,
-    banners: false,
-    editFaq: false,
-    editOferta: false,
-    editAviso: false,
-    editClues: false,
-    apiKey: false,
-    editDirectorio: false,
+    cifras: null,
+    userMagger: null,
+    crateUser: null,
+    video: null,
+    banners: null,
+    editFaq: null,
+    editOferta: null,
+    editAviso: null,
+    editClues: null,
+    editDirectorio: null,
 });
 
 const getPermissions = async () => {
@@ -287,8 +334,6 @@ const getInformationUser = async () => {
                         break;
                     case 'manager-directory':
                         userPermissions.value.editDirectorio = true;
-                        break;
-                    default:
                         break;
                 }
             }

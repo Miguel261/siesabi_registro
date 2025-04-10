@@ -13,10 +13,10 @@
                         <div class="col-sm-12 col-md-3 text-center text-md-left">
                             <label class="fuente">Entidad federativa:</label>
                             <br>
-                            <Dropdown v-model="state" v-on:change="getMunicipio()" :options="states"
-                                optionLabel="name" :panelStyle="{
-                                'font-size': '1.4rem'
-                            }" class="col-12 custom-calendar fuente" required />
+                            <Dropdown v-model="state" v-on:change="getMunicipio()" :options="states" optionLabel="name"
+                                :panelStyle="{
+                                    'font-size': '1.4rem'
+                                }" class="col-12 custom-calendar fuente" required />
                         </div>
 
                         <div class="col-sm-12 col-md-3 text-center text-md-left">
@@ -24,24 +24,24 @@
                             <br>
                             <Dropdown v-model="municipality" v-on:change="getLocality()" :options="municipalitys"
                                 optionLabel="name" :panelStyle="{
-                            'font-size': '1.4rem'
-                        }" class="col-12 custom-calendar fuente" required />
+                                    'font-size': '1.4rem'
+                                }" class="col-12 custom-calendar fuente" required />
                         </div>
 
                         <div class="col-sm-12 col-md-3 text-center text-md-left">
                             <label class="fuente">Localidad:</label>
                             <br>
                             <Dropdown v-model="locality" :options="localitys" optionLabel="name" :panelStyle="{
-                            'font-size': '1.4rem'
-                        }" class="col-12 custom-calendar fuente" required />
+                                'font-size': '1.4rem'
+                            }" class="col-12 custom-calendar fuente" required />
                         </div>
 
                         <div class="col-sm-12 col-md-3 text-center text-md-left">
                             <label class="fuente">Instituciones:</label>
                             <br>
                             <Dropdown v-model="institucion" :options="instituciones" optionLabel="name" :panelStyle="{
-                            'font-size': '1.4rem'
-                        }" class="col-12 custom-calendar fuente" required />
+                                'font-size': '1.4rem'
+                            }" class="col-12 custom-calendar fuente" required />
                         </div>
                     </div>
 
@@ -63,6 +63,93 @@
                                 Nombre del establecimiento:</label>
                             <br>
                             <input type="text" v-model="nombreUnidad" class="col-12 input-search fuente" required>
+                        </div>
+                    </div>
+
+                    <td><br></td>
+
+                    <div class="col-12 text-center text-md-left">
+                        <p class="fuente">Información adicional.</p>
+                    </div>
+
+                    <div class="row col-12">
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Jurisdicción:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.jurisdictionName" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Nivel de atención:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.attentionLevelName" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Estrato:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.strato" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Código Postal:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.postalCode" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">RFC:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.rfc" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Estatus:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.status" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <td><br></td>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Dirección:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.direction" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Latitud:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.latitud" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Longitud:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.longitud" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Ultimo movimiento:</label>
+                            <br>
+                            <input type="text" v-model="formDataAditional.lastMove" 
+                            class="col-12 input-search fuente" required>
+                        </div>
+
+                        <div class="col-sm-12 col-md-2 text-center text-md-left">
+                            <label class="fuente">Fecha del ultimo movimiento:</label>
+                            <br>
+                            <Calendar v-model="formDataAditional.dateLastMove" 
+                            class="custom-calendar col-12" :minDate="today" required />
                         </div>
 
                         <td><br></td>
@@ -88,6 +175,7 @@ import { useToast } from "primevue/usetoast";
 import { useRouter } from 'vue-router';
 import Fieldset from 'primevue/fieldset';
 import swal from 'sweetalert';
+import { MannagerError } from '@/errors/MannagerErros';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -105,6 +193,19 @@ const instituciones = ref(null);
 const institucion = ref(null);
 const clues = ref(null);
 const nombreUnidad = ref(null);
+const formDataAditional = ref({
+    jurisdictionName: '',
+    attentionLevelName: '',
+    strato: '',
+    postalCode: '',
+    rfc: '',
+    status: '',
+    direction: '',
+    latitud: '',
+    longitud: '',
+    lastMove: '',
+    dateLastMove: ''
+});
 
 const config = {
     headers: { 'Authorization': `Bearer ${authStore.getAccessToken}` }
@@ -122,42 +223,34 @@ const getState = async () => {
         states.value = response.data;
     }
     catch (error) {
-        toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Error al hacer la petición al servidor Codigo: ${error.status}`,
-            life: 2000
-        });
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 
 const getMunicipio = async () => {
     try {
         const response = await axios.get(`${url}/api/location/with-id/municipality/${state.value.id}`, config);
-
         municipalitys.value = response.data;
     }
     catch (error) {
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 
 const getLocality = async () => {
     try {
         const response = await axios.get(`${url}/api/location/with-id/locality/${municipality.value.id}`, config);
-
         localitys.value = response.data;
     }
     catch (error) {
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 
-const SaveClues = async () =>{
-    try{
-        if(state.value == null || municipality.value == null || locality.value == null ||
-            institucion.value == null || clues.value == null || nombreUnidad.value == null){
+const SaveClues = async () => {
+    try {
+        if (state.value == null || municipality.value == null || locality.value == null ||
+            institucion.value == null || clues.value == null || nombreUnidad.value == null) {
             toast.add({
                 severity: 'warn',
                 summary: 'Advertencia',
@@ -165,14 +258,25 @@ const SaveClues = async () =>{
                 life: 2000
             });
         }
-        else{
+        else {
             const response = await axios.post(`${url}/api/clue/create`, {
-                state_id: state.value.id,
-                municipality_id: municipality.value.id,
-                locality_id: locality.value.id,
-                institution_id: institucion.value.id,
+                stateId: state.value.id,
+                municipalityId: municipality.value.id,
+                localityId: locality.value.id,
+                institutionId: institucion.value.id,
                 value: clues.value,
-                unity_name: nombreUnidad.value
+                unityName: nombreUnidad.value,
+                jurisdictionName: formDataAditional.jurisdictionName,
+                attentionLevelName: formDataAditional.attentionLevelName,
+                strato: formDataAditional.strato,
+                postalCode: formDataAditional.postalCode,
+                rfc: formDataAditional.rfc,
+                status: formDataAditional.status,
+                direction: formDataAditional.direction,
+                latitud: formDataAditional.latitud,
+                longitud: formDataAditional.longitud,
+                lastMove: formDataAditional.lastMove,
+                dateLastMove: formDataAditional.dateLastMove
             }, config);
 
             if (response.status === 201) {
@@ -189,14 +293,8 @@ const SaveClues = async () =>{
             }
         }
     }
-    catch(error){
-        toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Error al hacer la petición al servidor Codigo: ${error.status}`,
-            life: 2000
-        });
-        console.log(error);
+    catch (error) {
+        MannagerError(error, router, authStore, toast);
     }
 };
 

@@ -206,9 +206,12 @@ import Menu from 'primevue/menu';
 import Dialog from 'primevue/dialog';
 import Textarea from 'primevue/textarea';
 import { useToast } from "primevue/usetoast";
+import { useRouter } from 'vue-router';
+import { MannagerError } from '@/errors/MannagerErros';
 
 const authStore = useAuthStore();
 const toast = useToast();
+const router = useRouter();
 
 const url = import.meta.env.VITE_URL_HOST;
 const faqs = ref([]);
@@ -301,7 +304,7 @@ const getAllFaqs = async () => {
           faqs.value = response.data.results;
      }
      catch (error) {
-          console.log(error);
+          MannagerError(error, router, authStore, toast);
      }
 }
 
@@ -403,7 +406,7 @@ const SaveFaq = async () =>{
           }
      }
      catch (error) {
-          console.log(error);
+          MannagerError(error, router, authStore, toast);
      }
 };
 
@@ -418,7 +421,7 @@ const DeleteFaq = async () =>{
           }
      }
      catch (error) {
-          console.log(error);
+          MannagerError(error, router, authStore, toast);
      }
 };
 
@@ -442,7 +445,7 @@ const UpdateFaq = async () =>{
           }
      }
      catch (error) {
-          console.log(error);
+          MannagerError(error, router, authStore, toast);
      }
 };
 

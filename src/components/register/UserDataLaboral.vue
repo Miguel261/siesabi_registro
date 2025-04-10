@@ -311,6 +311,7 @@ import { handleGeneralError } from "@/errors/GeneralErrors";
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import Fieldset from 'primevue/fieldset';
+import { MannagerError } from '@/errors/MannagerErros';
 
 const toast = useToast();
 const authStore = useAuthStore();
@@ -485,7 +486,7 @@ const getMunicipio = async () => {
         municipalitys.value = response.data;
     }
     catch (error) {
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 
@@ -506,7 +507,7 @@ const getLocality = async () => {
         localitys.value = response.data;
     }
     catch (error) {
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 
@@ -547,7 +548,7 @@ const getClues = async () => {
         }
     }
     catch (error) {
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
 };
 

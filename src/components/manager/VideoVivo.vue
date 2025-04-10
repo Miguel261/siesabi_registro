@@ -73,6 +73,8 @@ import axios from 'axios';
 import swal from 'sweetalert';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
+import { MannagerError } from '@/errors/MannagerErros';
+import { useToast } from "primevue/usetoast";
 
 onMounted(async () => {
     await getVideo();
@@ -81,6 +83,7 @@ onMounted(async () => {
 const router = useRouter();
 const url = import.meta.env.VITE_URL_HOST;
 const authStore = useAuthStore();
+const toast = useToast();
 
 const isLoading = ref(false);
 
@@ -109,7 +112,7 @@ const getVideo = async () => {
         label.value = response.data.is_enabled === 0 ? 'Activar' : 'Desactivar';
     }
     catch (error) {
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
     finally {
         isLoading.value = false;
@@ -145,7 +148,7 @@ const SaveVideo = async () => {
         }
     }
     catch (error) {
-        console.log(error)
+        MannagerError(error, router, authStore, toast);
     }
     finally {
         isLoading.value = false;
@@ -172,7 +175,7 @@ const ActiveVideo = async () => {
         await getVideo(); // Vuelve a cargar los datos
     }
     catch (error) {
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
     finally {
         isLoading.value = false;
@@ -190,7 +193,7 @@ const DesactiveVideo = async () => {
         await getVideo(); // Vuelve a cargar los datos
     }
     catch (error) {
-        console.log(error);
+        MannagerError(error, router, authStore, toast);
     }
     finally {
         isLoading.value = false;

@@ -238,7 +238,7 @@ const getInformationUser = async () => {
 
         if (response.status == 200) {
             userData.value = response.data;
-
+    
             if (response.data.profile.genderName == "Hombre") {
                 genero.value = "Bienvenido"
             }

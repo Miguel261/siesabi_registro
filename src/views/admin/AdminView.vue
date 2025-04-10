@@ -21,11 +21,6 @@
                         v-on:click="manager" aria-selected="false">Manager</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="clues-tab" data-bs-toggle="tab" data-bs-target="#clues"
-                        type="button" role="tab" aria-controls="video" aria-selected="false" 
-                        v-on:click="clues">Clues</button>
-                </li>
-                <li class="nav-item" role="presentation">
                     <button class="nav-link fuente" id="credentials-tab" data-bs-toggle="tab"
                         data-bs-target="#credentials" type="button" role="tab" aria-controls="credentials"
                         aria-selected="false">
@@ -59,7 +54,6 @@
 <script setup>
 import Users from '@/components/admin/Users.vue';
 import CredentialsView from '@/components/admin/CredentialsView.vue';
-import DirectoryView from '@/components/admin/Directory/DirectoryView.vue';
 import { onMounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
@@ -74,12 +68,6 @@ onMounted(async () => {
 const manager = () =>{
     router.push('/manager');
 };
-
-const clues = () =>{
-    router.push('/clues');
-};
-
-
 
 </script>
 

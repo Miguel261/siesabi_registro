@@ -48,6 +48,17 @@
                         Oferta educativa
                     </button>
                 </li>
+                <li v-if="havePermissions('manager-directory') || authStore.getRol == 'admin'" class="nav-item" 
+                role="presentation">
+                    <button class="nav-link fuente" id="directory-tab" data-bs-toggle="tab" data-bs-target="#directory"
+                        type="button" role="tab" aria-controls="directory" aria-selected="false">Directorio</button>
+                </li>
+                <li v-if="havePermissions('manager-clues') || authStore.getRol == 'admin'" class="nav-item"
+                    role="presentation">
+                    <button class="nav-link fuente" id="clues-tab" data-bs-toggle="tab" data-bs-target="#clues"
+                        type="button" role="tab" aria-controls="video" aria-selected="false"
+                        v-on:click="clues">Clues</button>
+                </li>
             </ul>
 
             <div class="tab-content" id="myTabContent">
@@ -80,6 +91,10 @@
                     <br><br>
                     <Faq />
                 </div>
+                <div class="tab-pane fade" id="directory" role="tabpanel" aria-labelledby="directory-tab">
+                    <br><br>
+                    <DirectoryView></DirectoryView>
+                </div>
             </div>
         </div>
     </div>
@@ -89,14 +104,17 @@
 import Banner from '@/components/manager/Banner.vue'
 import CretaUsersCuvanos from '@/components/manager/CreateUsersCubanos.vue';
 import EducationalOffer from '@/components/manager/EducationalOffer.vue';
+import DirectoryView from '@/components/admin/Directory/DirectoryView.vue';
 import Faq from '@/components/manager/Faq.vue';
 import PrivacityNotice from '@/components/manager/PrivacityNotice.vue';
 import Users from '@/components/manager/Users.vue';
 import VideoVivo from '@/components/manager/VideoVivo.vue';
 import { ref, onMounted } from "vue";
+import { useRouter } from 'vue-router';
 
 import { useAuthStore } from '@/stores/auth';
 
+const router = useRouter();
 const authStore = useAuthStore();
 
 const permissions = ref(null);
@@ -110,6 +128,9 @@ const havePermissions = (permiso) => {
     return Array.isArray(permissions.value) && permissions.value.includes(permiso);
 };
 
+const clues = () => {
+    router.push('/clues');
+};
 
 </script>
 
