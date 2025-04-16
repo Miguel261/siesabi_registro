@@ -314,6 +314,7 @@ const visible = ref(false);
 
 const Verificar = async () =>{
     try{
+        isLoading.value = true;
         const response = await axios.put(`${url}/api/user/verify-email`, {}, {
             headers: {
                 'Authorization': `Bearer ${authStore.getAccessToken}`
@@ -327,8 +328,11 @@ const Verificar = async () =>{
                 buttons: "Ok"
             });
         }
+
+        isLoading.value = false;
     }
     catch(error){
+        isLoading.value = false;
         toast.add({
             severity: 'error',
             summary: 'Error',
