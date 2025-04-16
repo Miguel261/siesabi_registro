@@ -220,9 +220,7 @@
     <Dialog v-model:visible="visible" modal header="Iniciar sesión a los cursos" :style="{ width: '40rem' }">
         <form :action="moodle" method="POST">
             <div class="flex align-items-center gap-3 mb-3">
-                <label class="fuente w-6rem">Correo electrónico:</label>
-                <br>
-                <input type="text" v-model="email" name="username" class="col-md-12 col-sm-12 input-search fuente"
+                <input type="hidden" v-model="email" name="username" class="col-md-12 col-sm-12 input-search fuente"
                     required>
             </div>
             <div class="flex align-items-center gap-3 mb-3">
