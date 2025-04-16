@@ -40,26 +40,26 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="d-flex flex-column flex-sm-row justify-content-end align-items-center w-100 mt-3 mt-sm-0">
-                            <div v-if="manager == true"
-                                class="col-sm-12 col-md-6 col-lg-2 d-flex justify-content-center">
-                                <Button class="fuente Button-manager custom-icon w-100" v-on:click="ViewManager"
-                                    label="Manager" icon="pi pi-crown" />
+
+
+                        <div class="d-flex flex-wrap justify-content-center justify-content-md-end align-items-center 
+                            w-100 mt-3 gap-2">
+                            <div v-if="manager == true">
+                                <Button class="fuente Button-manager custom-icon flex-grow-0 w-sm-100 w-md-auto"
+                                    v-on:click="ViewManager" label="Manager" icon="pi pi-crown" />
                             </div>
 
-                            <div class="col-sm-12 col-md-6 col-lg-2 d-flex justify-content-center mt-2 mt-sm-0">
-                                <Button class="fuente Button-courses custom-icon w-100" label="Ir a los cursos"
-                                    icon="pi pi-sign-in" v-on:click="visible = true" />
+                            <div>
+                                <Button class="fuente Button-courses custom-icon flex-grow-0 w-sm-100 w-md-auto"
+                                    label="Ir a los cursos" icon="pi pi-sign-in" v-on:click="visible = true" />
                             </div>
                         </div>
                     </template>
                 </Card>
-
                 <td><br></td>
 
-                <div class="row col-md-8 col-sm-12 d-flex user-information">
-                    <Card style="background-color: #f9f9f9;" class="row col-sm-12 col-md-5">
+                <div class="row col-md-12 col-sm-12 col-lg-8 d-flex user-information">
+                    <Card style="background-color: #f9f9f9;" class="row col-sm-12  col-lg-5">
                         <template #content>
                             <div class="col-12 d-flex justify-content-between align-items-center">
                                 <div class="text-left">
@@ -82,8 +82,8 @@
                                     </label>
                                 </div>
                                 <div class="col-12 d-flex align-items-center mb-3">
-                                    <i class="pi pi-envelope icon-user"></i>
-                                    <label class="label-user">
+                                    <i class="pi pi-envelope icon-user correo-i"></i>
+                                    <label class="label-user correo">
                                         {{ userData.email }}
                                     </label>
                                 </div>
@@ -102,19 +102,32 @@
                                 <div class="col-12 d-flex align-items-center mb-3">
                                     <i class="pi pi-verified icon-user"></i>
                                     <label class="label-user">
-                                        Correo: {{ userData.emailVerifiedAt ? 'Verificado' : 'No verificado' }}
+                                        Correo:
+                                        <span :class="userData.emailVerifiedAt ? 'text-success' : 'text-danger'">
+                                            {{ userData.emailVerifiedAt ? 'Verificado ✔' : 'No verificado ❌' }}
+                                        </span>
                                         <span v-if="!userData.emailVerifiedAt">
-                                            -  <a v-on:click="Verificar()"
-                                                style="color: blue; text-decoration: underline; cursor: pointer;"
-                                                >verifica aquí</a>
+                                            - <a v-on:click="Verificar()" class="text-primary text-decoration-underline"
+                                                style="cursor: pointer;">
+                                                verifica aquí</a>
                                         </span>
                                     </label>
                                 </div>
-
                                 <div class="col-12 d-flex align-items-center mb-3">
                                     <i class="pi pi-calendar icon-user"></i>
                                     <label class="label-user">
                                         Cuenta creada el: {{ moment(userData.createdAt).format('DD/MM/YYYY') }}
+                                    </label>
+                                </div>
+
+                                <div class="col-12 d-flex align-items-center mb-3">
+                                    <i class="pi pi-download icon-user"></i>
+                                    <label class="label-user">
+                                        <span>
+                                            <a v-on:click="DownloadCosntancia()"
+                                                style="color: blue; text-decoration: underline; cursor: pointer;">
+                                                Descarga tu constancia de registro aquí</a>
+                                        </span>
                                     </label>
                                 </div>
                             </div>
@@ -124,7 +137,7 @@
                     <td class="separacion"><br></td>
 
                     <!-- Cuarta Card (ocupa 7 columnas) -->
-                    <Card style="background-color: #f9f9f9;" class="row col-sm-12 col-md-7">
+                    <Card style="background-color: #f9f9f9;" class="row col-sm-12 col-lg-7">
                         <template #content>
                             <!-- Contenedor para el título y el botón -->
                             <div class="col-12 d-flex justify-content-between align-items-center">
@@ -209,7 +222,8 @@
             <div class="flex align-items-center gap-3 mb-3">
                 <label class="fuente w-6rem">Correo electrónico:</label>
                 <br>
-                <input type="text" v-model="email" name="username" class="col-md-12 col-sm-12 input-search fuente" required>
+                <input type="text" v-model="email" name="username" class="col-md-12 col-sm-12 input-search fuente"
+                    required>
             </div>
             <div class="flex align-items-center gap-3 mb-3">
                 <label class="fuente w-6rem">Contraseña:</label>
@@ -436,6 +450,54 @@ const ViewLaboralProfiles = () => {
     router.push('/user/laboral-profiles');
 };
 
+const DownloadCosntancia = async () =>{
+    try{
+        const response = await axios.post(`${url}/api/register/success`, {}, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getAccessToken}`
+            },
+            responseType: 'blob'
+        });
+
+        const urlBlob = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = urlBlob;
+        link.setAttribute('download', 'constancia_de_registro.pdf'); 
+        document.body.appendChild(link);
+        link.click();
+
+   
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(urlBlob)
+    }
+    catch(error){
+        if (
+            error.response &&
+            error.response.data instanceof Blob &&
+            error.response.data.type === 'application/json'
+        ) {
+            const text = await error.response.data.text();
+            const json = JSON.parse(text);
+            console.error('Mensaje del servidor:', json.message);
+
+            toast.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: `${json.message}`,
+                life: 2000
+            });
+
+        } else {
+            toast.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: `${error}`,
+                life: 2000
+            });
+
+        }
+    }
+};
 
 </script>
 
@@ -564,6 +626,17 @@ const ViewLaboralProfiles = () => {
 
     .separacion {
         display: block;
+    }
+}
+
+@media (min-width: 900px) and (max-width: 1200px) {
+    .correo {
+        display: none !important;
+    }
+
+    /* Opcional: si quieres que el icono también ocupe menos espacio */
+    .correo-i {
+        display: none !important;
     }
 }
 </style>
