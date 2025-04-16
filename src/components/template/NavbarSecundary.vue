@@ -7,6 +7,12 @@
             <span class="navbar-brand text-white">
                 <img src="/images/Logo_Blanco_IMSSB.png" alt="Logo IMSS-Bienestar" width="155">
             </span>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_2"
+                aria-controls="navbar_2" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
             <div class="collapse navbar-collapse justify-content-end" id="navbar_2">
                 <ul class="navbar-nav ml-auto">
                     <li v-if="authStore.getAccessToken == null" class="nav-item">
@@ -85,7 +91,6 @@
 import { useAuthStore } from '@/stores/auth';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
-import { handleGeneralError } from "@/errors/GeneralErrors";
 import { pdfView } from '@/components/resources/pdfView';
 
 const authStore = useAuthStore();
@@ -96,8 +101,8 @@ const router = useRouter();
 const getPrivateNotice = async () => {
     try {
         const response = await axios.get(`${url}/api/private-notice`);
-        if (response.data.link) {
-            pdfView(response.data.link);
+        if (response.data.url) {
+            pdfView(response.data.url);
         }
     } catch (error) {
         console.log(error);
@@ -107,8 +112,8 @@ const getPrivateNotice = async () => {
 const getEducationalOffer = async () => {
     try {
         const response = await axios.get(`${url}/api/educational-offer`);
-        if (response.data.link) {
-            pdfView(response.data.link);
+        if (response.data.url) {
+            pdfView(response.data.url);
         }
     } catch (error) {
         console.log(error);

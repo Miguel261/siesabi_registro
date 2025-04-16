@@ -374,6 +374,8 @@ const getData = async () => {
         const responseMedicalCategories = await axios.post(`${url}/api/common/medical_categories`);
         const responseResidentes = await axios.post(`${url}/api/common/resident_grades`);
         const responseEspecialidades = await axios.post(`${url}/api/common/specialties`, { laboral_category_id: 1 });
+        const responseEspsEnf = await axios.post(`${url}/api/common/specialties`, { laboral_category_id: 2 });
+        const responseEspsOdont = await axios.post(`${url}/api/common/specialties`, { laboral_category_id: 3 });
 
         let categorias = [];
         let instituciones = [];
@@ -387,6 +389,8 @@ const getData = async () => {
         medicalCategories.value = responseMedicalCategories.data;
         residentes.value = responseResidentes.data;
         specialties.value = responseEspecialidades.data;
+        specialtiesEnf.value = responseEspsEnf.data;
+        specialtiesOdonto.value = responseEspsOdont.data;
 
         categorias = responseCategorieLaboral.data;
         categorias.push({ id: 0, name: 'Otra' });
@@ -653,11 +657,32 @@ const getInformationUser = async () => {
     }
 };
 
+const isFieldEmpty = (field) => {
+    
+    if (typeof field === 'object' && field !== null) {
+        return !field.id && !field.code && !field.municipalityName && !field.localityName;
+    }
+ 
+    return field === '';
+}
+
 const saveUserProfiles = async () => {
 
-    if (formData.value.pais.code === '' || formData.value.categorieLaboral.id === '' ||
-        formData.value.levelAtention.id === '' || formData.value.grado.id === '' ||
-        formData.value.matricula === '' || formData.value.cedula === '') {
+    if (
+        isFieldEmpty(formData.value.pais) ||
+        isFieldEmpty(formData.value.categorieLaboral) ||
+        isFieldEmpty(formData.value.municipality) ||
+        isFieldEmpty(formData.value.locality) ||
+        isFieldEmpty(formData.value.levelAtention) ||
+        isFieldEmpty(formData.value.grado) ||
+        formData.value.matricula === '' ||
+        formData.value.cedula === '' ||
+        isFieldEmpty(formData.value.institution) ||
+        isFieldEmpty(formData.value.area) ||
+        isFieldEmpty(formData.value.clues) ||
+        isFieldEmpty(formData.value.cargo)
+    ) {
+        console.log(formData.value)
         showToastRegister();
     }
     else {

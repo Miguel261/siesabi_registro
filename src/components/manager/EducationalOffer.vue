@@ -57,7 +57,7 @@
                </Column>
                <Column header="Enlace de descarga" style="width: 25%">
                     <template #body="{ data }">
-                         <a :href="data.link" v-if="data.link" target="_blank">Descargar archivo</a>
+                         <a :href="data.url" v-if="data.url" target="_blank">Descargar archivo</a>
                     </template>
                </Column>
           </DataTable>

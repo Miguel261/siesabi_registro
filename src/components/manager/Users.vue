@@ -239,6 +239,12 @@ const userData = ref(null);
 const curp = ref('');
 const email = ref('');
 
+const config = {
+    headers: {
+        'Authorization': `Bearer ${authStore.getAccessToken}`
+    }
+};
+
 const getUser = () => {
     if (curp.value === '' && email.value === '') {
         showToast();
@@ -306,11 +312,7 @@ const SearchUserSiesabi = async () => {
     try {
 
         isLoading.value = true;
-        const response = await axios.get(`${url}/api/user/all?curp=${curp.value}&email=${email.value}`, {
-            headers: {
-                'Authorization': `Bearer ${authStore.getAccessToken}`
-            }
-        });
+        const response = await axios.get(`${url}/api/user/all?curp=${curp.value}&email=${email.value}`, config);
 
         if (response.status == 200) {
             if (response.data.total === 0) {
@@ -364,13 +366,12 @@ const changeEmail = async () => {
     if (isValidEmail(newEmail.value)) {
         try {
             isLoading.value = true;
-            const response = await axios.put(`${url}/api/user/${userData.value.id}/update-email`, { email: newEmail.value }, {
-                headers: {
-                    'Authorization': `Bearer ${authStore.getAccessToken}`
-                }
-            });
+            
+            const response = await axios.put(`${url}/api/user/${userData.value.id}/update-email`, 
+            { email: newEmail.value }, config);
 
             if (response.status == 200) {
+                isLoading.value = false;
                 showSuccess(response.data.message);
                 changeEmailDialog.value = false;
                 email.value = newEmail.value;
@@ -406,11 +407,7 @@ const confirmUpdatePassword = async () => {
 
 const updatePAssword = async () => {
     try {
-        const response = await axios.put(`${url}/api/user/${userData.value.id}/refresh-password`, {}, {
-            headers: {
-                'Authorization': `Bearer ${authStore.getAccessToken}`
-            }
-        });
+        const response = await axios.put(`${url}/api/user/${userData.value.id}/refresh-password`, {}, config);
 
         if (response.status == 200) {
             swal("Se actualizo la contraseña correctamente!", {
@@ -458,11 +455,8 @@ const confirmGenerateMoodle = async () => {
 const updateEmailToLowerCase = async () => {
     isLoading.value = true;
     try {
-        const response = await axios.put(`${url}/api/user/${userData.value.id}/update-email-to-lower-case`, {}, {
-            headers: {
-                'Authorization': `Bearer ${authStore.getAccessToken}`
-            }
-        });
+        const response = await axios.put(`${url}/api/user/${userData.value.id}/update-email-to-lower-case`, 
+        {}, config);
 
         if (response.status == 200) {
             isLoading.value = false;
@@ -494,13 +488,9 @@ const updateEmailToLowerCase = async () => {
 
 const generateMoodle = async () => {
     try {
-        const response = await axios.put(`${url}/api/user/${userData.value.id}/generate-moodle-account`, {}, {
-            headers: {
-                'Authorization': `Bearer ${authStore.getAccessToken}`
-            }
-        });
+        const response = await axios.put(`${url}/api/user/${userData.value.id}/generate-moodle-account`, {}, config);
 
-        if (response.status == 200) {
+        if (response.status == 201) {
             showSuccess(response.data.message);
             SearchUserSiesabi();
             isLoading.value = false;
@@ -513,6 +503,57 @@ const generateMoodle = async () => {
             isLoading.value = false;
             return;
         }
+        isLoading.value = false;
+        MannagerError(error, router, authStore, toast);
+    }
+};
+
+const confirmSyncCifras = async () =>{
+    const userConfirmation = await swal({
+        title: "Sincronización de cuenta de Cifras",
+        text: "¿Seguro deseas hacer esta acción?",
+        icon: "warning",
+        buttons: {
+            cancel: "No",
+            confirm: "Sí",
+        },
+        dangerMode: true,
+    });
+
+    if (userConfirmation) {
+        isLoading.value = true;
+        SyncCifras();
+    }
+};
+
+const SyncCifras = async () => {
+    try {
+        isLoading.value = true;
+        const user = await axios.get(`${url}/api/user/${userData.value.id}`, config);
+
+        const hasPermission = user.data.permissions.includes('access-to-cifras');
+
+        if (!hasPermission) {
+            isLoading.value = false;
+            toast.add({
+                severity: 'warn',
+                summary: 'Información',
+                detail: 'El usuario no tiene acceso a cifras',
+                life: 2000
+            });
+            return; 
+        }
+        
+        const cifras = await axios.put(
+            `${url}/api/user/${userData.value.id}/generate-cifras-account`,
+            {},
+            config
+        );
+
+        isLoading.value = false;
+        showSuccess(cifras.data.message);
+
+    } catch (error) {
         isLoading.value = false;
         MannagerError(error, router, authStore, toast);
     }
@@ -538,6 +579,13 @@ const items = [
         icon: 'pi pi-check-square',
         command: () => {
             confirmGenerateMoodle()
+        }
+    },
+    {
+        label: 'Sincronizar cuenta de cifras ',
+        icon: 'pi pi-sync',
+        command: () => {
+            confirmSyncCifras()
         }
     },
     {

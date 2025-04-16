@@ -121,8 +121,8 @@
 
                                 <div class="fuente justify-content-center">
                                     <Checkbox v-model="userPermissions.userMagger"
-                                        v-on:change="UpdatePermission(8, userPermissions.userMagger)" 
-                                        :binary="true" class="mr-4" />
+                                        v-on:change="UpdatePermission(8, userPermissions.userMagger)" :binary="true"
+                                        class="mr-4" />
                                     <label for="size_normal">Usuarios</label>
                                 </div>
 
@@ -180,6 +180,13 @@
                                         v-on:change="UpdatePermission(30, userPermissions.editDirectorio)"
                                         :binary="true" class="mr-4" />
                                     <label for="size_normal">Editar directorio</label>
+                                </div>
+
+                                <div class="fuente justify-content-center">
+                                    <Checkbox v-model="userPermissions.coursesPriority"
+                                        v-on:change="UpdatePermission(27, userPermissions.coursesPriority)"
+                                        :binary="true" class="mr-4" />
+                                    <label for="size_normal">Cursos prioritarios</label>
                                 </div>
 
                             </div>
@@ -266,6 +273,7 @@ const userPermissions = ref({
     editAviso: null,
     editClues: null,
     editDirectorio: null,
+    coursesPriority: null
 });
 
 const getPermissions = async () => {
@@ -334,6 +342,9 @@ const getInformationUser = async () => {
                         break;
                     case 'manager-directory':
                         userPermissions.value.editDirectorio = true;
+                        break;
+                    case 'manager-priority-course':
+                        userPermissions.value.coursesPriority = true;
                         break;
                 }
             }

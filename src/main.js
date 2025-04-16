@@ -23,6 +23,7 @@ import Card from 'primevue/card';
 import MultiSelect from 'primevue/multiselect';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
+import Tooltip from 'primevue/tooltip';
 
 /* --- CONFIGURACIÓN DE PINIA (STORE) ADEMAS DE LA PERSISTENCIA DE DATOS ---*/
 
@@ -34,8 +35,9 @@ app.use(PrimeVue);
 app.use(pinia); // Usas la misma instancia de Pinia con el plugin aplicado
 app.use(router);
 
-/* --- COMPONENTES DE PRIMEVUE 4.0 ---*/
 
+/* --- COMPONENTES DE PRIMEVUE 4.0 ---*/
+app.directive('tooltip', Tooltip);
 app.component('Password', Password);
 app.component('Button', Button);
 app.component('DataTable', DataTable);

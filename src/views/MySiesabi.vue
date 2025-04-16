@@ -38,21 +38,19 @@
                                         </label>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div
+                            class="d-flex flex-column flex-sm-row justify-content-end align-items-center w-100 mt-3 mt-sm-0">
+                            <div v-if="manager == true"
+                                class="col-sm-12 col-md-6 col-lg-2 d-flex justify-content-center">
+                                <Button class="fuente Button-manager custom-icon w-100" v-on:click="ViewManager"
+                                    label="Manager" icon="pi pi-crown" />
+                            </div>
 
-                                <!-- Contenedor para los botones (alineados a la parte inferior de la imagen) -->
-                                <div
-                                    class="d-flex flex-column flex-sm-row justify-content-center align-items-center w-100 mt-3 mt-sm-0">
-                                    <div v-if="authStore.getPermissions.length != 0"
-                                        class="col-sm-6 col-md-4 d-flex justify-content-center">
-                                        <Button class="fuente Button-manager custom-icon w-100" v-on:click="ViewManager"
-                                            label="Manager" icon="pi pi-crown" />
-                                    </div>
-
-                                    <div class="col-sm-6 col-md-5 d-flex justify-content-center mt-2 mt-sm-0">
-                                        <Button class="fuente Button-courses custom-icon w-100" label="Ir a los cursos"
-                                            icon="pi pi-sign-in" />
-                                    </div>
-                                </div>
+                            <div class="col-sm-12 col-md-6 col-lg-2 d-flex justify-content-center mt-2 mt-sm-0">
+                                <Button class="fuente Button-courses custom-icon w-100" label="Ir a los cursos"
+                                    icon="pi pi-sign-in" v-on:click="visible = true" />
                             </div>
                         </div>
                     </template>
@@ -105,6 +103,11 @@
                                     <i class="pi pi-verified icon-user"></i>
                                     <label class="label-user">
                                         Correo: {{ userData.emailVerifiedAt ? 'Verificado' : 'No verificado' }}
+                                        <span v-if="!userData.emailVerifiedAt">
+                                            -  <a v-on:click="Verificar()"
+                                                style="color: blue; text-decoration: underline; cursor: pointer;"
+                                                >verifica aquí</a>
+                                        </span>
                                     </label>
                                 </div>
 
@@ -132,7 +135,7 @@
                                     </label>
                                 </div>
                                 <!-- Botón pegado a la derecha -->
-                                <Button v-on:click="ViewLaboralProfiles"  icon="pi pi-cog"
+                                <Button v-on:click="ViewLaboralProfiles" icon="pi pi-cog"
                                     class="Button-config custom-icon .pi" />
                             </div>
 
@@ -200,33 +203,146 @@
         </div>
     </div>
 
+
+    <Dialog v-model:visible="visible" modal header="Iniciar sesión a los cursos" :style="{ width: '40rem' }">
+        <form :action="moodle" method="POST">
+            <div class="flex align-items-center gap-3 mb-3">
+                <label class="fuente w-6rem">Correo electrónico:</label>
+                <br>
+                <input type="text" v-model="email" name="username" class="col-md-12 col-sm-12 input-search fuente" required>
+            </div>
+            <div class="flex align-items-center gap-3 mb-3">
+                <label class="fuente w-6rem">Contraseña:</label>
+                <br>
+                <input type="password" name="password" class="col-md-12 col-sm-12 input-search fuente" required>
+            </div>
+
+            <br>
+            <div class="d-flex justify-content-center">
+                <div class="row g-sm-3 g-md-0 col-12">
+                    <div class="col-md-6 col-sm-6">
+                        <Button type="button" label="Cancel" severity="secondary" @click="visible = false"
+                            class="Button-courses w-100"></Button>
+                    </div>
+                    <td class="td"><br></td>
+                    <div class="col-md-6 col-sm-6">
+                        <Button type="submit" label="Iniciar Sesión" class="Button-manager w-100"></Button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br>
+    </Dialog>
+
     <br><br>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import moment from 'moment';
+import swal from 'sweetalert';
+import { useToast } from "primevue/usetoast";
 
 const isLoading = ref(false);
+const toast = useToast();
 
 onMounted(async () => {
+    await getPermissions();
     await authStore.refreshTokenStore();
     isLoading.value = true;
-    getInformationUser();
+    await getInformationUser();
+
+    if (route.query.errorcode) {
+        showErrorAlert(route.query.errorcode);
+    }
 });
 
+const showErrorAlert = (errorCode) => {
+    let errorMessage = '';
+
+    switch (errorCode) {
+        case '3':
+            errorMessage = 'Contraseña incorrecta.';
+            break;
+        case '4':
+            errorMessage = 'Tiempo expirado, vuelve a ingresar tu usuario y contraseña en el botón de Ir a cursos.';
+            break;
+        default:
+            errorMessage = 'Error al iniciar sesión. Por favor, inténtalo de nuevo.';
+    }
+
+    swal({
+        icon: 'error',
+        title: 'Error al acceder a los cursos',
+        text: errorMessage,
+        confirmButtonText: 'Entendido'
+    });
+    
+    router.replace({ query: {} });
+}
+
 const url = import.meta.env.VITE_URL_HOST;
+const moodle = import.meta.env.VITE_URL_MOODLE;
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 const userData = ref(null);
 const genero = ref(null);
+const permissions = ref(null);
+const manager = ref(false);
+const email = ref(null);
+const visible = ref(false);
+
+const Verificar = async () =>{
+    try{
+        const response = await axios.put(`${url}/api/user/verify-email`, {}, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getAccessToken}`
+            }
+        });
+
+        if(response.status === 200){
+            swal("Se envio correctamente un correo con la verificación, revisa tu bandeja de entrada!", {
+                icon: "success",
+                title: "Éxito!",
+                buttons: "Ok"
+            });
+        }
+    }
+    catch(error){
+        toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: `Error al mandar el correo de verificación`,
+            life: 2000
+        });
+    }
+};
+
+const getPermissions = async () => {
+    try {
+        const response = await axios.get(`${url}/api/common/roles-and-permissions`, {
+            headers: {
+                'Authorization': `Bearer ${authStore.getAccessToken}`
+            }
+        });
+
+        permissions.value = response.data.permissions;
+    }
+    catch (error) {
+        console.log(error);
+        if (error.response && error.response.status === 401) {
+            router.push('/login')
+        }
+    }
+};
 
 const getInformationUser = async () => {
     try {
@@ -238,7 +354,49 @@ const getInformationUser = async () => {
 
         if (response.status == 200) {
             userData.value = response.data;
-    
+            email.value = response.data.email;
+            const userPermisos = userData.value.permissions;
+
+            permissions.value.forEach(permission => {
+                if (userPermisos.includes(permission.name)) {
+                    switch (permission.name) {
+                        case 'manager-users':
+                            manager.value = true;
+                            break;
+                        case 'manager-users-create':
+                            manager.value = true;
+                            break;
+                        case 'manager-live-video':
+                            manager.value = true;
+                            break;
+                        case 'manager-banners':
+                            manager.value = true;
+                            break;
+                        case 'faq-edit':
+                            manager.value = true;
+                            break;
+                        case 'manager-educatival-offer':
+                            manager.value = true;
+                            break;
+                        case 'manager-private-notice':
+                            manager.value = true;
+                            break;
+                        case 'manager-clues':
+                            manager.value = true;
+                            break;
+                        case 'manager-api-key':
+                            manager.value = true;
+                            break;
+                        case 'manager-directory':
+                            manager.value = true;
+                            break;
+                        case 'manager-priority-course':
+                            manager.value = true;
+                            break;
+                    }
+                }
+            });
+
             if (response.data.profile.genderName == "Hombre") {
                 genero.value = "Bienvenido"
             }
@@ -270,7 +428,7 @@ const ViewManager = () => {
     router.push('/manager');
 };
 
-const ViewOptions = () =>{
+const ViewOptions = () => {
     router.push('/user/ajustes');
 };
 

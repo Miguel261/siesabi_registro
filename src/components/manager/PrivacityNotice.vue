@@ -1,6 +1,6 @@
 <template>
      <div class="mb-5">
-          <Dialog v-model:visible="visible" maximizable modal class="fs-4" header="Agregar un nuevo banner"
+          <Dialog v-model:visible="visible" maximizable modal class="fs-4" header="Agregar un nuevo aviso de privacidad"
                :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
                <div class="d-flex flex-column gap-1 mb-4">
                     <label for="title" class="font-semibold">Titulo del pdf *</label>
@@ -57,7 +57,7 @@
                </Column>
                <Column header="Enlace de descarga" style="width: 25%">
                     <template #body="{ data }">
-                         <a :href="data.link" v-if="data.link" target="_blank">Descargar archivo</a>
+                         <a :href="data.url" v-if="data.url" target="_blank">Descargar archivo</a>
                     </template>
                </Column>
           </DataTable>

@@ -1,29 +1,29 @@
 <template>
     <div class="container-btn col-12">
-        <img class="img-final col-12" src="/public/images/carrucel/Imagen final de SiESABI.png" alt="">
+        <img class="img-final col-12" src="/images/carrucel/Imagen final de SiESABI.png" alt="">
         <div class="contenedor">
             <div class="container-redes">
                 <a href="https://x.com/SIESABI_/" target="_blank" rel="noopener noreferrer">
-                    <img class="img-redes" src="/public/images/redes/twitter.png" alt="Twitter">
+                    <img class="img-redes" src="/images/redes/twitter.png" alt="Twitter">
                 </a>
                 <a href="#" target="_blank" rel="noopener noreferrer">
-                    <img class="img-redes" src="/public/images/redes/tiktok.png" alt="TikTok">
+                    <img class="img-redes" src="/images/redes/tiktok.png" alt="TikTok">
                 </a>
                 <a href="https://www.youtube.com/@SIESABI" target="_blank" rel="noopener noreferrer">
-                    <img class="img-redes" src="/public/images/redes/youtube.png" alt="YouTube">
+                    <img class="img-redes" src="/images/redes/youtube.png" alt="YouTube">
                 </a>
             </div>
             <br>
             <div class="container-redes">
                 <a href="https://www.facebook.com/SiESABI/?locale=es_LA" target="_blank" rel="noopener noreferrer">
-                    <img class="img-redes" src="/public/images/redes/facebook.png" alt="Facebook">
+                    <img class="img-redes" src="/images/redes/facebook.png" alt="Facebook">
                 </a>
                 <a href="https://www.instagram.com/plataformasiesabi?igsh=MTgwbTVtMzYwMHRneA==" target="_blank"
                     rel="noopener noreferrer">
-                    <img class="img-redes" src="/public/images/redes/instagram.png" alt="Instagram">
+                    <img class="img-redes" src="/images/redes/instagram.png" alt="Instagram">
                 </a>
                 <a href="https://wa.me/7442284487?text=Hola" target="_blank" rel="noopener noreferrer">
-                    <img class="img-redes" src="/public/images/redes/whatsapp.png" alt="WhatsApp">
+                    <img class="img-redes" src="/images/redes/whatsapp.png" alt="WhatsApp">
                 </a>
             </div>
         </div>

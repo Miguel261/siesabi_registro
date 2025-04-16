@@ -5,7 +5,7 @@
                 <div class="grid">
                     <div class="col-12 md:col-12">
                         <div class="card p-fluid" style="background-color: #f8f9fa;">
-                          
+
                             <br>
 
                             <div class="email-user">
@@ -50,7 +50,7 @@
                                 <div class="col-md-7 col-sm-12 d-flex align-items-center mb-3">
                                     <Password v-model="password" placeholder="Ingresa tu contraseña nueva"
                                         :toggle-mask="true" class="w-full mb-3" inputClass="w-full"
-                                        autocomplete="new-password">
+                                        autocomplete="new-password" :feedback="false">
                                     </Password>
                                 </div>
 
@@ -62,7 +62,7 @@
                                 <div class="col-md-7 col-sm-12 d-flex align-items-center mb-3">
                                     <Password v-model="confirmPassword" placeholder="Confirma tu contraseña"
                                         :toggle-mask="true" class="w-full mb-3" inputClass="w-full"
-                                        autocomplete="new-password">
+                                        autocomplete="new-password" :feedback="false">
                                     </Password>
                                 </div>
                             </div>

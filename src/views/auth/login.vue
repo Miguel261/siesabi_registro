@@ -5,7 +5,7 @@
                 <div class="row h-100">
                     <!-- Columna izquierda para la imagen -->
                     <div class="col-md-6 justify-content-center align-items-center img-gif">
-                        <img src="/public/images/inicio siesabi_l.svg" alt="Imagen" class="img-fluid">
+                        <img src="/images/inicio siesabi_l.svg" alt="Imagen" class="img-fluid">
                     </div>
                     <!-- Columna derecha para los inputs -->
                     <div
@@ -23,7 +23,7 @@
 
                             <label class="fuente-label" for="">Contraseña</label>
                             <Password v-model="formData.password" placeholder="Password" :toggle-mask="true"
-                                class="w-full mb-3" inputClass="w-full">
+                                class="w-full mb-3" inputClass="w-full" :feedback="false">
                             </Password>
 
                             <br><br><br>
@@ -110,8 +110,10 @@ function submitForm() {
         //recaptchaToken: recaptchaToken.value,
     })
         .then((response) => {
-            authStore.setTokens(response.data.accessToken, response.data.refreshToken, response.data.roles[0], response.data.permissions);
+            authStore.setTokens(response.data.accessToken, response.data.refreshToken, response.data.roles[0], 
+            response.data.permissions);
             isLoading.value = false;
+
             if (response.data.roles[0] === 'admin') {
                 router.push('/admin');
             } else {
@@ -120,12 +122,12 @@ function submitForm() {
         })
         .catch((error) => {
             isLoading.value = false;
-            if (error.response.data.statusCode === 401){
+            if (error.status === 401){
                 showErrorEmail();
                 return;
             }
 
-            if (error.response.data.statusCode === 404) {
+            if (error.status === 404) {
                 showErrorCredentials();
                 return;
             }
@@ -178,7 +180,7 @@ const showErrorCredentials = () => {
 }
 
 .img-gif {
-    background-image: url('/public/images/rojos pt2.svg');
+    background-image: url('/images/rojos pt2.svg');
     background-size: 100%;
     background-position: cover;
     background-repeat: repeat;

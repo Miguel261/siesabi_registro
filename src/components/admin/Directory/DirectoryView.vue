@@ -15,6 +15,14 @@
         <DataTable :reorderableColumns="true" @rowReorder="onRowReorder" :value="directory" dataKey="id"
             responsiveLayout="scroll" v-model:expandedRows="expandedRows">
 
+            <template #header>
+                <div class="pb-2 d-flex gap-2 justify-content-between">
+                    <div class="fs-3">
+                        Directorio
+                    </div>
+                </div>
+            </template>
+
             <Column rowReorder headerStyle="width: 3rem" :reorderableColumn="true" />
 
             <Column class="fuente" header="ID" headerClass="column-header" bodyClass="column-body"
@@ -107,9 +115,8 @@
 
                                     <Button icon="pi pi-trash"
                                         style="color: white; background-color: #a57f2c; border-color: #a57f2c;"
-                                        class="p-button-md p-button-rounded p-button custom-icon" 
-                                        @click="ConfirmDeletePeople(slotProps.data)"
-                                        title="Ver" />
+                                        class="p-button-md p-button-rounded p-button custom-icon"
+                                        @click="ConfirmDeletePeople(slotProps.data)" title="Ver" />
 
                                 </div>
                             </template>

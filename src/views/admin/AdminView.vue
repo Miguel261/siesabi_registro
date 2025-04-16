@@ -9,10 +9,6 @@
                         registrados</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link fuente" id="directory-tab" data-bs-toggle="tab" data-bs-target="#directory"
-                        type="button" role="tab" aria-controls="directory" aria-selected="false">Directorio</button>
-                </li>
-                <li class="nav-item" role="presentation">
                     <button class="nav-link fuente" id="video-tab" data-bs-toggle="tab" data-bs-target="#video"
                         type="button" role="tab" aria-controls="video" aria-selected="false">Pruebas</button>
                 </li>
@@ -32,10 +28,6 @@
                 <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
                     <br><br>
                     <Users></Users>
-                </div>
-                <div class="tab-pane fade" id="directory" role="tabpanel" aria-labelledby="directory-tab">
-                    <br><br>
-                    <DirectoryView></DirectoryView>
                 </div>
                 <div class="tab-pane fade" id="create-user" role="tabpanel" aria-labelledby="create-user-tab">
                     <br><br>

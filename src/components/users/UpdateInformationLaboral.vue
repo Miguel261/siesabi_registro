@@ -821,12 +821,29 @@ const changeCategorie = () => {
 };
 
 
+const isFieldEmpty = (field) => {
+  
+    if (typeof field === 'object' && field !== null) {
+        return !field.id && !field.code && !field.municipalityName && !field.localityName;
+    }
+   
+    return field === '';
+}
+
+
 const updateUserProfiles = async () => {
 
-    if (formData.value.pais.code === '' || formData.value.categorieLaboral.id === '' ||
-        formData.value.levelAtention.id === '' || formData.value.grado.id === '' ||
-        formData.value.matricula === '' || formData.value.cedula === '') {
-        showToastRegister();
+    if (
+        isFieldEmpty(formData.value.pais) ||
+        isFieldEmpty(formData.value.categorieLaboral) ||
+        isFieldEmpty(formData.value.municipality) ||
+        isFieldEmpty(formData.value.locality) ||
+        isFieldEmpty(formData.value.levelAtention) ||
+        isFieldEmpty(formData.value.grado) ||
+        formData.value.matricula === '' ||
+        formData.value.cedula === ''
+    ) {
+        showToastRegister(); 
     }
     else {
 

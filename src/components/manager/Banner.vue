@@ -68,7 +68,7 @@
                               <p class="fs-4 p-2 text-primary">Ver imagen</p>
                          </template>
                          <template #preview="slotProps">
-                              <img :src="data.image_name" :alt="data.title" :style="slotProps.style"
+                              <img :src="data.url" :alt="data.title" :style="slotProps.style"
                                    @click="slotProps.onClick" />
                          </template>
                     </Image>
@@ -162,7 +162,7 @@ const disableBanner = async id => await axios.put(`${url}/api/banner/${id}/disab
 
 const deleteItem = async (id) => {
      await axios.delete(`${url}/api/banner/${id}`, config)
-          .catch(err => swal('Error!', 'Error al intentar eliminar el banner.' + err.message, 'error'))
+          .catch(err => console.log(err))
 }
 
 const deleteItems = async () => {

@@ -5,8 +5,8 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li v-if="havePermissions('manager-users') || authStore.getRol == 'admin'" class="nav-item"
                     role="presentation">
-                    <button class="nav-link active fuente" id="users-tab" data-bs-toggle="tab" data-bs-target="#users"
-                        type="button" role="tab" aria-controls="users" aria-selected="true">Usuarios</button>
+                    <button class="nav-link fuente" id="users-tab" data-bs-toggle="tab" data-bs-target="#users"
+                        type="button" role="tab" aria-controls="users" aria-selected="false">Usuarios</button>
                 </li>
                 <li v-if="havePermissions('manager-users-create') || authStore.getRol == 'admin'" class=" nav-item"
                     role="presentation">
@@ -48,10 +48,16 @@
                         Oferta educativa
                     </button>
                 </li>
-                <li v-if="havePermissions('manager-directory') || authStore.getRol == 'admin'" class="nav-item" 
-                role="presentation">
+                <li v-if="havePermissions('manager-directory') || authStore.getRol == 'admin'" class="nav-item"
+                    role="presentation">
                     <button class="nav-link fuente" id="directory-tab" data-bs-toggle="tab" data-bs-target="#directory"
                         type="button" role="tab" aria-controls="directory" aria-selected="false">Directorio</button>
+                </li>
+                <li v-if="havePermissions('manager-priority-course') || authStore.getRol == 'admin'" class="nav-item"
+                    role="presentation">
+                    <button class="nav-link fuente" id="courses-tab" data-bs-toggle="tab" data-bs-target="#courses"
+                        type="button" role="tab" aria-controls="courses" aria-selected="false">Cursos
+                        prioritarios</button>
                 </li>
                 <li v-if="havePermissions('manager-clues') || authStore.getRol == 'admin'" class="nav-item"
                     role="presentation">
@@ -62,7 +68,7 @@
             </ul>
 
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+                <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
                     <br><br>
                     <Users></Users>
                 </div>
@@ -78,7 +84,8 @@
                     <br><br>
                     <Banner></Banner>
                 </div>
-                <div class="tab-pane fade" id="privacity-notice" role="tabpanel" aria-labelledby="privacity-notice-tab">
+                <div class="tab-pane fade" id="privacity-notice" role="tabpanel" 
+                aria-labelledby="privacity-notice-tab">
                     <br><br>
                     <PrivacityNotice></PrivacityNotice>
                 </div>
@@ -95,6 +102,10 @@
                     <br><br>
                     <DirectoryView></DirectoryView>
                 </div>
+                <div class="tab-pane fade" id="courses" role="tabpanel" aria-labelledby="courses-tab">
+                    <br><br>
+                    <Courses></Courses>
+                </div>
             </div>
         </div>
     </div>
@@ -109,6 +120,7 @@ import Faq from '@/components/manager/Faq.vue';
 import PrivacityNotice from '@/components/manager/PrivacityNotice.vue';
 import Users from '@/components/manager/Users.vue';
 import VideoVivo from '@/components/manager/VideoVivo.vue';
+import Courses from '@/components/manager/Courses.vue';
 import { ref, onMounted } from "vue";
 import { useRouter } from 'vue-router';
 

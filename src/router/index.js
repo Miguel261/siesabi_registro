@@ -15,6 +15,7 @@ import permisosUserAdminVue from '@/components/admin/permisos/PermisosUserAdmin.
 import userOptionsVue from '@/views/user/userOptions.vue'
 import UpdateInformationLaboralVue from '@/components/users/UpdateInformationLaboral.vue'
 import CluesViewVue from '@/views/clues/CluesView.vue'
+import VerifyEmailViewVue from '@/views/verification/VerifyEmailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,6 +50,11 @@ const router = createRouter({
       name: 'dashboard',
       component: Dashboard,
       meta: { requiresAuth: true },
+    },
+    {
+      path: '/access-token',
+      name: 'access',
+      component: VerifyEmailViewVue,
     },
     {
       path: '/manager',

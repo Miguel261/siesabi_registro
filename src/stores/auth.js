@@ -23,6 +23,7 @@ export const useAuthStore = defineStore('auth', {
       this.refreshToken = null;
       this.rol = null;
       this.permissions = null;
+ 
     },
     async refreshTokenStore() {
       const router = useRouter();
@@ -34,7 +35,8 @@ export const useAuthStore = defineStore('auth', {
         });
 
         if (response.status == 201) {
-          this.setTokens(response.data.accessToken, response.data.refreshToken, response.data.roles[0], response.data.permissions);
+          this.setTokens(response.data.accessToken, response.data.refreshToken, response.data.roles[0], 
+            response.data.permissions);
         }
       } catch (error) {
         console.log(error);

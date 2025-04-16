@@ -15,6 +15,14 @@
             responsiveLayout="scroll" v-model:expandedRows="expandedRows" :paginator="true" :rows="20"
             :filters="filters">
 
+            <template #header>
+                <div class="pb-2 d-flex gap-2 justify-content-between">
+                    <div class="fs-3">
+                        Lista de instituciones
+                    </div>
+                </div>
+            </template>
+
             <Column class="fuente" header="ID" headerClass="column-header" bodyClass="column-body"
                 headerStyle="width:1%;">
                 <template #body="slotProps">

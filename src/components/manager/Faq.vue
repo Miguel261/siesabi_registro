@@ -14,6 +14,13 @@
 
           <DataTable :reorderableColumns="true" @columnReorder="onColReorder" @rowReorder="onRowReorder" :value="faqs"
                dataKey="id" responsiveLayout="scroll" showGridlines>
+               <template #header>
+                    <div class="pb-2 d-flex gap-2 justify-content-between">
+                         <div class="fs-3">
+                              Preguntas frecuentes
+                         </div>
+                    </div>
+               </template>
                <Column rowReorder headerStyle="width: 3rem" :reorderableColumn="true" />
                <Column class="fuente" header="ID" headerClass="column-header" bodyClass="column-body"
                     headerStyle="width:1%;">

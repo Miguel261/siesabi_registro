@@ -8,7 +8,7 @@
                         <form id="demo-form" @submit.prevent="validateForm" class="w-75" autocomplete="off">
                             <div class="col-12 text-center">
                                 <br>
-                                <img src="/public/images/Logo SiESABI Guinda.png" alt="" width="270">
+                                <img src="/images/LOGO SIESABI Plus Rojo.png" alt="" width="270">
                                 <label class="fuente-titulo" for="">Crear Cuenta</label>
                             </div>
 
@@ -206,6 +206,7 @@ const regiserUser = async () => {
             isLoading.value = false;
         }
     } catch (error) {
+        console.log(error)
         isLoading.value = false;
         if (error.status === 409) {
             showErrorRegister(error.response.data.message);

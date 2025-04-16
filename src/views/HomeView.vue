@@ -1,11 +1,11 @@
-<template>
+<template v-if="courses">
     <div class="container col-11 position-relative container-carrucel crrcel">
         <!-- Contenedor principal flexible -->
         <div class="d-flex align-items-stretch">
             <!-- Contenedor de Logos Institucionales -->
             <div class="logos-container">
-                <img src="/public/images/Logo_Blanco_IMSSB.png" alt="Logo Institucional 1">
-                <img src="/public/images/Logo SiESABI Blanco.png" alt="Logo Institucional 2">
+                <img src="/images/Logo_Blanco_IMSSB.png" alt="Logo Institucional 1">
+                <img src="/images/LOGO SIESABI Plus blanco.png" alt="Logo Institucional 2">
             </div>
             <!-- Carrusel de Noticias -->
             <div id="carouselNoticias" class="carousel slide flex-grow-1" data-bs-ride="carousel">
@@ -16,9 +16,8 @@
                         'active': index === currentIndex, 'slide-left':
                             index === currentIndex
                     }]">
-                        <a :href="`${image.link}`" target="_blank">
-                            <img :src="`${image.image_name}`" class="d-block w-100 img-carrucel"
-                                :alt="`Noticia ${index + 1}`">
+                        <a v-on:click="abrirEnlace(image.link)">
+                            <img :src="`${image.url}`" class="d-block w-100 img-carrucel" :alt="`Noticia ${index + 1}`">
                         </a>
                     </div>
                 </div>
@@ -34,19 +33,19 @@
 
     <div class="row cuadros col-12">
         <div class="cuadro col-12 col-md-10 col-lg-2" v-on:click="getPrivateNotice">
-            <img src="/public/images/icons/Aviso.png" alt="">
+            <img src="/images/icons/Aviso.png" alt="">
             <label class="fuente-cuadros">Aviso de privacidad</label>
         </div>
         <div class="cuadro col-12 col-md-10 col-lg-2" v-on:click="getEducationalOffer">
-            <img src="/public/images/icons/Catalogo.png" alt="">
+            <img src="/images/icons/Catalogo.png" alt="">
             <label class="fuente-cuadros">Catálogo de Educación Continua y Permanente</label>
         </div>
         <div class="cuadro col-12 col-md-10 col-lg-2" v-on:click="pushDirectory">
-            <img class="img-icons" src="/public/images/icons/Directorio.png" alt="">
+            <img class="img-icons" src="/images/icons/Directorio.png" alt="">
             <label class="fuente-cuadros">Directorio</label>
         </div>
         <div class="cuadro col-12 col-md-10 col-lg-2" v-on:click="pushQuestions">
-            <img src="/public/images/icons/Preg Frec.png" alt="">
+            <img src="/images/icons/Preg Frec.png" alt="">
             <label class="fuente-cuadros">Preguntas frecuentes</label>
         </div>
     </div>
@@ -73,116 +72,116 @@
 
     <div class="row container-circulos col-12">
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objAPS">
                 <img style="margin-bottom: 4px; margin-left: 3px;" class="img-semi"
-                    src="/public/images/seminarios/APS y MASB.svg" alt="">
+                    src="/images/seminarios/APS y MASB.svg" alt="">
             </div>
             <label class="fuente-seminarios">APS y MAS-Bienestar</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objMedicinaSalud">
                 <img style="margin-top: 6px; margin-right: 10px;" class="img-semi"
-                    src="/public/images/seminarios/Medicina y Salud.svg" alt="">
+                    src="/images/seminarios/Medicina y Salud.svg" alt="">
             </div>
             <label class="fuente-seminarios ">Medicina y Salud</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objSaludMental">
                 <img style="margin-top: 5px; margin-right: 12px;" class="img-semi"
-                    src="/public/images/seminarios/Salud Mental.svg" alt="">
+                    src="/images/seminarios/Salud Mental.svg" alt="">
             </div>
             <label class="fuente-seminarios ">Salud Mental</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
-                <img style="margin-top: 6px; margin-right: 15px;" class="img-semi"
-                    src="/public/images/seminarios/Envejecimiento.svg" alt="">
+            <div class="circulo" v-tooltip.top="objEnvejecimiento">
+                <img style="margin-top: 6px; margin-right: 15px;" class="img-semi" src="/images/seminarios/spes.svg"
+                    alt="">
             </div>
             <label class="fuente-seminarios ">Envejecimiento Saludable</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objEnfermeria">
                 <img style="margin-top: 5px; margin-right: 14px;" class="img-semi"
-                    src="/public/images/seminarios/Enfermeria.svg" alt="">
+                    src="/images/seminarios/Enfermeria.svg" alt="">
             </div>
             <label class="fuente-seminarios ">Enfermería</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objDocencia">
                 <img style="margin-bottom: 10px; margin-right: 8px;" class="img-semi"
-                    src="/public/images/seminarios/Docencia en Salud.svg" alt="">
+                    src="/images/seminarios/Docencia en Salud.svg" alt="">
             </div>
             <label class="fuente-seminarios ">Docencia en Salud</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objInvestigacion">
                 <img style="margin-top: 6px; margin-left: 6px;" class="img-semi"
-                    src="/public/images/seminarios/Investigacion.svg" alt="">
+                    src="/images/seminarios/Investigacion.svg" alt="">
             </div>
             <label class="fuente-seminarios ">Investigación en Salud</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objAlimentacion">
                 <img style="margin-top: 11px; margin-right: 7px;" class="img-semi"
-                    src="/public/images/seminarios/Alimentacion.svg" alt="">
+                    src="/images/seminarios/Alimentacion.svg" alt="">
             </div>
             <label class="fuente-seminarios">Alimentación y Nutrición</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objCalidad">
                 <img style="margin-bottom: 10px; margin-right: 22px;" class="img-semi"
-                    src="/public/images/seminarios/Calidad y Seguridad.svg" alt="">
+                    src="/images/seminarios/Calidad y Seguridad.svg" alt="">
             </div>
             <label class="fuente-seminarios">Calidad y Seguridad del Paciente</label>
         </div>
 
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objPromocion">
                 <img style="margin-top: 8px; margin-right: 10px;" class="img-semi"
-                    src="/public/images/seminarios/Promocion.svg" alt="">
+                    src="/images/seminarios/Promocion.svg" alt="">
             </div>
             <label class="fuente-seminarios ">Promoción de la Salud</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
-                <img style="margin-top: 17px; margin-left: 4px;" class="img-semi"
-                    src="/public/images/seminarios/logoACS.svg" alt="">
+            <div class="circulo" v-tooltip.top="objGestionTerritorial">
+                <img style="margin-top: 17px; margin-left: 4px;" class="img-semi" src="/images/seminarios/logoACS.svg"
+                    alt="">
             </div>
-            <label class="fuente-seminarios ">Acción Comunitaria</label>
+            <label class="fuente-seminarios ">Gestión Territorial en Salud</label>
         </div>
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objSaludBucal">
                 <img style="margin-bottom: 10px; margin-right: 15px;" class="img-semi"
-                    src="/public/images/seminarios/Salud Bucal.svg" alt="">
+                    src="/images/seminarios/Salud Bucal.svg" alt="">
             </div>
             <label class="fuente-seminarios ">Salud Bucal</label>
         </div>
 
 
         <div class="container-circulo">
-            <div class="circulo">
+            <div class="circulo" v-tooltip.top="objTrabajoSocial">
                 <img style="margin-top: 12px; margin-right: 15px;" class="img-semi"
-                    src="/public/images/seminarios/Trabajo Social.svg" alt="">
+                    src="/images/seminarios/Trabajo Social.svg" alt="">
             </div>
             <label class="fuente-seminarios ">Trabajo Social en Salud</label>
         </div>
 
 
         <div class="container-circulo">
-            <div class="circulo">
-                <img style="margin-top: 6px; margin-right: 10px;" class="img-semi"
-                    src="/public/images/seminarios/Gestion.svg" alt="">
+            <div class="circulo" v-tooltip.top="objGestionDirectiva">
+                <img style="margin-top: 6px; margin-right: 10px;" class="img-semi" src="/images/seminarios/Gestion.svg"
+                    alt="">
             </div>
             <label class="fuente-seminarios ">Gestión Directiva y Economía de la Salud</label>
         </div>
@@ -200,6 +199,29 @@
 
     </div>
 
+    <div class="container-btn">
+        <div class="col-12">
+            <button class="button-green col-md-12 col-sm-12 fuente-cuadros" icon="pi pi-search">
+                Cursos Prioritarios
+            </button>
+        </div>
+    </div>
+
+    <br><br>
+
+    <div class="row container-circulos col-12 animate">
+        <Card v-for="(course, index) in courses" :key="index" style="overflow: hidden; height: 400px;"
+            class="col-md-3 col-lg-3 col-sm-12">
+            <template #header>
+                <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                    <img alt="user header" :src="course.image_link" class="img-semi"
+                        style="object-fit: cover; height: 100%; width: 100%;" />
+                </div>
+            </template>
+            <template #title>{{ course.name }}</template>
+        </Card>
+    </div>
+
     <br><br>
 
     <Social className="social-component"></Social>
@@ -213,6 +235,7 @@ import { pdfView } from '@/components/resources/pdfView';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import Card from 'primevue/card';
 
 const imagesBanner = ref([]);
 let interval;
@@ -221,10 +244,85 @@ const router = useRouter();
 const url = import.meta.env.VITE_URL_HOST;
 const authStore = useAuthStore();
 const videoData = ref(null);
+const courses = ref(null);
+
+const objAPS = ref(`Objetivo: Fomentar la aplicación de los conceptos 
+teóricos de la Atención Primaria de Salud en la operación de los Servicios 
+de Salud con ejemplos prioritarios en el Sistema de salud en México.`);
+
+const objMedicinaSalud = ref(`Objetivo: Fomentar un espacio de aprendizaje 
+continuo y permanente en temas relevantes de Medicina, con el fin de actualizar 
+al personal de salud, promoviendo la formación y la educación de los 
+profesionales de la salud.`);
+
+const objSaludMental = ref(``);
+
+const objEnvejecimiento = ref(`Objetivo: Fortalecer las competencias del personal
+ de salud para la atención integral de las personas mayores, promoviendo un 
+ envejecimiento saludable y activo. A partir de desarrollar sesiones de actualización 
+que aborden aspectos clínicos, sociales y preventivos en el envejecimiento, 
+para coadyuvar en la mejora de la calidad de vida y la implementación de modelos 
+  de atención centrados en las personas mayores.`);
+
+const objEnfermeria = ref(`Objetivo: Actualizar las competencias del personal 
+de enfermería con enfoque en las prioridades en salud del IMSS-BIENESTAR con la 
+finalidad de mantener la calidad y seguridad de la atención a la población usuaria.`);
+
+const objSaludBucal = ref(`Objetivo general: Promover el fortalecimiento de las competencias
+ técnicas y clínicas del personal de salud en el ámbito de la Salud Bucal, mediante
+  la actualización continua y la difusión de estrategias basadas en evidencia, alineadas
+   con el Modelo de Atención a la Salud para el Bienestar, para mejorar la calidad de
+    los servicios y fomentar el bienestar integral de la población.`);
+
+const objDocencia = ref(`Objetivo: fortalecer la profesionalización del personal de 
+salud con actividad docente mediante el desarrollo de competencias docentes para elevar 
+la calidad e impulsar la innovación en los procesos de enseñanza aprendizaje en los 
+programas de educación en salud y formar recursos humanos que contribuyan a mejorar 
+la calidad de la atención en los Servicios Públicos de Salud del IMSS-BIENESTAR.`);
+
+const objInvestigacion = ref(`Objetivo: Estimular ideas vinculadas a la investigación 
+en salud, centradas en las experiencias de los expositores, lo que contribuye a enriquecer
+ bajo sus perspectivas e impulsa gradualmente en las intervenciones de cada uno al 
+ reflexionar sobre contextos compartidos.`);
+
+const objAlimentacion = ref(`Objetivo: Fortalecer las competencias del personal de 
+salud para el cuidado nutricio de las personas, las familias y las comunidades. A partir 
+de desarrollar sesiones de actualización que contemplen aspectos sociales y clínicos de la 
+alimentación y nutrición. Para coadyuvar en la implementación del Modelo de Atención a la Salud para el Bienestar.`);
+
+const objCalidad = ref(`Objetivo: del seminario: proporcionar contenido educativo a la 
+plataforma educativa continua (Sistema Educativo de Salud para el Bienestar) para mejorar 
+las competencias y con ello las prácticas profesionales, actualizar conocimientos y 
+fortalecer competencias en los temas clave relacionados con la seguridad y la calidad 
+en la atención médica y sanitaria con enfoque de educación interprofesional y práctica 
+colaborativa. Esto incluye promover una cultura organizacional orientada a la mejora 
+continua, garantizar la atención segura para los pacientes y optimizar los procesos 
+clínicos, administrativos y de gestión dentro de los servicios públicos de salud a nivel 
+nacional, centrado a la persona, población y comunidad sin seguridad social.`);
+
+const objPromocion = ref(``);
+
+const objTrabajoSocial = ref(`Objetivo: Contribuir a la formación de las y los participantes 
+mediante la identificación, explicación y aplicación de los aspectos teórico-metodológicos, 
+necesarios en el desempeño de actividades en los procesos sustantivos de Trabajo Social con 
+relación a las 10 prioridades de salud establecidas por los Servicios de Salud del Instituto 
+Mexicano del Seguro Social para el Bienestar (IMSS BIENESTAR).`);
+
+const objGestionDirectiva = ref(`Objetivo: Proporcionar a los participantes los conocimientos y 
+herramientas necesarias para optimizar la gestión directiva en los sistemas de salud, así 
+como para comprender y aplicar principios económicos en la toma de decisiones estratégicas, 
+con el fin de mejorar la eficiencia, sostenibilidad y calidad en los servicios de salud.`);
+
+const objGestionTerritorial = ref(`Objetivo: Fomentar espacios inclusivos de aprendizaje 
+colaborativo que permita a las y los participantes, conocer, comprender, fortalecer y 
+consolidar la Acción Comunitaria, mediante el abordaje de sus componentes clave, la 
+alfabetización en salud y los determinantes sociales, contribuyendo a impulsar comunidades 
+saludables y sostenibles.`);
 
 onMounted(async () => {
     await getBanner();
     await getVideo();
+    await getCoursesPriority();
     startInterval();
     setupScrollAnimation();
     await comfirmationLogin();
@@ -234,6 +332,10 @@ onMounted(async () => {
 onUnmounted(() => {
     clearInterval(interval);
 });
+
+const abrirEnlace = (url) =>{
+    window.open(url, '_blank', 'noopener,noreferrer');
+}
 
 const getVideo = async () => {
     try {
@@ -253,23 +355,23 @@ const getVideo = async () => {
 const getBannerStatic = () => {
     imagesBanner.value = [
         {
-            "image_name": '/public/images/carrucel/1.png',
+            "image_name": '/images/carrucel/1.png',
             "link": 'https://www.google.com.mx/?hl=es-419'
         },
         {
-            "image_name": '/public/images/carrucel/2.png',
+            "image_name": '/images/carrucel/2.png',
             "link": 'https://www.google.com.mx/?hl=es-419'
         },
         {
-            "image_name": '/public/images/carrucel/3.png',
+            "image_name": '/images/carrucel/3.png',
             "link": 'https://www.google.com.mx/?hl=es-419'
         },
         {
-            "image_name": '/public/images/carrucel/4.png',
+            "image_name": '/images/carrucel/4.png',
             "link": 'https://www.google.com.mx/?hl=es-419'
         },
         {
-            "image_name": '/public/images/carrucel/5.png',
+            "image_name": '/images/carrucel/5.png',
             "link": 'https://www.google.com.mx/?hl=es-419'
         }
     ];
@@ -296,7 +398,6 @@ const startInterval = () => {
     interval = setInterval(nextSlide, 4000); // Cambia cada 2 segundos
 };
 
-// Función para cambiar a la siguiente imagen
 const nextSlide = () => {
     currentIndex.value = (currentIndex.value + 1) % imagesBanner.value.length;
 };
@@ -335,11 +436,35 @@ const setupScrollAnimation = () => {
     });
 };
 
+const setupScrollAnimationAnimate = () => {
+    const elementos = document.querySelectorAll('.animate');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Opcional: dejar de observar después de que se anima
+                // observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px' // Se activa un poco antes de llegar al elemento
+    });
+
+    elementos.forEach((elemento, index) => {
+        // Aumenta el delay para un efecto más escalonado
+        elemento.style.transitionDelay = `${index * 0.35}s`;
+        observer.observe(elemento);
+    });
+};
+
 const getPrivateNotice = async () => {
     try {
         const response = await axios.get(`${url}/api/private-notice`);
-        if (response.data.link) {
-            pdfView(response.data.link);
+        if (response.data.url) {
+            pdfView(response.data.url);
+            console.log(response);
         }
     } catch (error) {
         console.log(error);
@@ -349,8 +474,8 @@ const getPrivateNotice = async () => {
 const getEducationalOffer = async () => {
     try {
         const response = await axios.get(`${url}/api/educational-offer`);
-        if (response.data.link) {
-            pdfView(response.data.link);
+        if (response.data.url) {
+            pdfView(response.data.url);
         }
     } catch (error) {
         console.log(error);
@@ -382,6 +507,18 @@ const comfirmationLogin = async () => {
     }
 };
 
+const getCoursesPriority = async () =>{
+    try{
+        const response = await axios.get(`${url}/api/course`);
+        courses.value = response.data.results;
+        setupScrollAnimationAnimate();
+    }
+    catch(error){
+
+    }
+};
+
+
 </script>
 
 <style>
@@ -396,7 +533,7 @@ const comfirmationLogin = async () => {
     gap: 20px;
     z-index: 10;
     border-radius: 10px 0 0 10px;
-    background-image: url('/public/images/rojos pt2.svg');
+    background-image: url('/images/rojos pt2.svg');
     background-size: 100%;
     background-position: cover;
     background-repeat: repeat;
@@ -567,7 +704,6 @@ const comfirmationLogin = async () => {
     opacity: 1;
     transform: translateY(0);
 }
-
 .circulo {
     width: 200px;
     height: 200px;
@@ -581,7 +717,6 @@ const comfirmationLogin = async () => {
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .circulo:hover {
     transform: scale(1.05);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -590,6 +725,18 @@ const comfirmationLogin = async () => {
 .img-semi {
     width: 220px;
     height: 260px;
+}
+.animate {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    filter: brightness(1.5);
+}
+
+.animate.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
 }
 
 .fuente-seminarios {
