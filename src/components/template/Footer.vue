@@ -51,13 +51,36 @@
                                 contra servidores públicos</a></h5>
                         <h5 class="letra">Síguenos en</h5>
                         <ul class="list-inline">
-                            <li><a class="social-icon facebook letra" target="_blank" rel="noopener"
-                                    title="Enlace abre en ventana nueva" href="https://www.facebook.com/gobmexico"
-                                    aria-label="Facebook de presidencia"></a></li>
-                            <li><a class="social-icon twitter letra" target="_blank" rel="noopener"
-                                    title="Enlace abre en ventana nueva" href="https://twitter.com/GobiernoMX"
-                                    aria-label="Twitter de presidencia"></a></li>
+                            <li>
+                                <a class="social-icon facebook letra" target="_blank" rel="noopener"
+                                    href="https://www.facebook.com/gobmexico" aria-label="Facebook de presidencia"
+                                    title="Facebook">
+                                    <i class="pi pi-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="social-icon twitter letra" target="_blank" rel="noopener"
+                                    href="https://twitter.com/GobiernoMX" aria-label="Twitter de presidencia"
+                                    title="Twitter">
+                                    <i class="pi pi-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="social-icon facebook letra" target="_blank" rel="noopener"
+                                    href="https://www.instagram.com/gobmexico/" aria-label="Facebook de presidencia"
+                                    title="Facebook">
+                                    <i class="pi pi-instagram"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="social-icon twitter letra" target="_blank" rel="noopener"
+                                    href="https://www.youtube.com/@gobiernodemexico" aria-label="Twitter de presidencia"
+                                    title="Twitter">
+                                    <i class="pi pi-youtube"></i>
+                                </a>
+                            </li>
                         </ul>
+
                     </div>
                 </div>
             </div>
@@ -140,6 +163,37 @@ html {
     font-size: 14px;
 }
 
+.letra:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+}
+.list-inline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.list-inline li {
+    display: inline-block;
+}
+
+.social-icon i {
+    font-size: 1.5rem;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.social-icon i:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
 .footer-pleca {
     background-color: #fff;
     background-image: url(https://framework-gb.cdn.gob.mx/gobmx/img/pleca.svg);
