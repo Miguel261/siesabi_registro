@@ -82,7 +82,7 @@
                     headerStyle="width:1%;">
                     <template #body="slotProps">
                          <Button icon="pi pi-cog" style="color: white; background-color: #611232;
-                    border-color: #611232;" class="p-button-md p-button-rounded p-button custom-icon"
+                    border-color: #611232;" class="p-button-md p-button-rounded p-button custom-icon2"
                               @click="viewOptions($event, slotProps.data)" title="Opciones" />
 
                          <OverlayPanel ref="overlayPanel" :dismissable="false">
@@ -479,6 +479,12 @@ const showDeleteSuccess = () => {
 <style>
 .td {
      display: none;
+}
+.custom-icon2 .pi {
+     font-size: 1.6rem;
+     position: relative;
+     left: 1.5px;
+     top: -1px;
 }
 @media (min-width: 200px) and (max-width: 900px) {
      .td {

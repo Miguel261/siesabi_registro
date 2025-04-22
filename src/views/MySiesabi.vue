@@ -70,7 +70,7 @@
                                 </div>
                                 <!-- Botón pegado a la derecha -->
                                 <Button v-on:click="ViewOptions" icon="pi pi-cog"
-                                    class="Button-config custom-icon .pi" />
+                                    class="Button-config custom-icon1" />
                             </div>
 
                             <!-- Labels con iconos, cada uno en col-12 -->
@@ -149,7 +149,7 @@
                                 </div>
                                 <!-- Botón pegado a la derecha -->
                                 <Button v-on:click="ViewLaboralProfiles" icon="pi pi-cog"
-                                    class="Button-config custom-icon .pi" />
+                                    class="Button-config custom-icon1" />
                             </div>
 
                             <!-- Labels con iconos, cada uno en col-12 -->
@@ -575,7 +575,13 @@ const DownloadCosntancia = async () =>{
 }
 
 .custom-icon .pi {
+    font-size: 1.5rem;
+}
+
+.custom-icon1 .pi {
     font-size: 1.6rem;
+    position: relative;
+    left: 1.5px;
 }
 
 .Button-config {
@@ -585,6 +591,12 @@ const DownloadCosntancia = async () =>{
     border: 2px solid #98989A !important;
     background-color: white !important;
     transition: all 0.3s ease;
+}
+
+.Button-config.custom-icon1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .Button-config:hover {

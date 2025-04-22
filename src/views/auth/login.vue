@@ -5,7 +5,7 @@
                 <div class="row h-100">
                     <!-- Columna izquierda para la imagen -->
                     <div class="col-md-6 justify-content-center align-items-center img-gif">
-                        <img src="/images/inicio siesabi_l.svg" alt="Imagen" class="img-fluid">
+                        <img src="/images/Compu Inicio SiESABI Plus.svg" alt="Imagen" class="img-fluid">
                     </div>
                     <!-- Columna derecha para los inputs -->
                     <div
@@ -72,6 +72,7 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 import { useToast } from "primevue/usetoast";
 import swal from 'sweetalert';
+import Password from 'primevue/password';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -177,6 +178,8 @@ const showErrorCredentials = () => {
 .img-fluid {
     width: 650px;
     height: auto;
+    position: relative;
+    top: 40px;
 }
 
 .img-gif {
@@ -251,26 +254,28 @@ const showErrorCredentials = () => {
 }
 
 .p-password {
+    position: relative;
     width: 100%;
-    height: 50px;
 }
 
-.p-password input {
+.p-password .p-inputtext {
+    padding-right: 40px !important;
     width: 100%;
-    height: 50px;
-    border-radius: 20px;
-    border: 2px solid black;
-    background-color: white;
+}
+
+.p-password .p-input-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
     color: black;
-    font-size: 16px;
-    margin-top: 0;
-    font-family: 'Noto Sans';
-    padding: 15px;
+    width: 18px;
+    height: 18px;
 }
 
-.p-password input::placeholder {
-    color: gray;
-    opacity: 1;
+.p-password .p-input-icon:hover {
+    color: red;
 }
 
 .loader {

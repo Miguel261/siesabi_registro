@@ -44,7 +44,7 @@
                     <div class="d-flex flex-column flex-md-row justify-content-end align-items-center gap-2">
                         <Button style="height: 44px;" class="col-md-2 col-sm-12 Button-manager custom-icon"
                             label="Actualizar" v-on:click="SaveVideo" icon="pi pi-sync" />
-                        <Button style="height: 44px;" class="col-md-2 col-sm-12 Button-secundary custom-icon"
+                        <Button style="height: 44px;" class="col-md-3 col-sm-12 Button-secundary custom-icon"
                             :label="label" v-on:click="ButtonActivateOpc" icon="pi pi-power-off" />
                     </div>
                 </div>

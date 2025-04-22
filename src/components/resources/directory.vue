@@ -3,14 +3,15 @@
         <div class="container-fluid contendor-img">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-md-12 d-flex justify-content-center align-items-center">
-                    <img src="/public/images/gobierno-mexico.png" alt="imss-bienestar logo" class="img-fluid col-4 me-2">
+                    <img src="/public/images/gobierno-mexico.png" alt="imss-bienestar logo"
+                        class="img-fluid col-4 me-2">
                     <img src="/public/images/IMSS-BIENESTAR H Color.png" alt="imss-bienestar logo"
                         class="img-fluid col-4 ms-2">
                 </div>
             </div>
         </div>
 
-        <br>
+        <br><br><br><br>
 
         <div class="container-fluid col-12">
             <div class="row">
@@ -40,7 +41,8 @@
                             }}</label>
                     </div>
                     <div class="barra-persona col-4 justify-content-center align-items-center">
-                        <label class="fuente-persona" :for="'email-' + index">{{ coordinadorItem.email }}</label>
+                        <label class="fuente-persona"
+                            :for="'email-' + index">imss_bienestar@imssbienestar.gob.mx</label>
                     </div>
                 </template>
 
@@ -58,7 +60,8 @@
                             }}</label>
                     </div>
                     <div class="barra-persona col-4 justify-content-center align-items-center">
-                        <label class="fuente-persona" :for="'email-' + index">{{ defItem.email }}</label>
+                        <label class="fuente-persona"
+                            :for="'email-' + index">imss_bienestar@imssbienestar.gob.mx</label>
                     </div>
                 </template>
 
@@ -76,7 +79,8 @@
                             }}</label>
                     </div>
                     <div class="barra-persona col-4 justify-content-center align-items-center">
-                        <label class="fuente-persona" :for="'email-' + index">{{ dimItem.email }}</label>
+                        <label class="fuente-persona"
+                            :for="'email-' + index">imss_bienestar@imssbienestar.gob.mx</label>
                     </div>
                 </template>
 
@@ -94,7 +98,8 @@
                             }}</label>
                     </div>
                     <div class="barra-persona col-4 justify-content-center align-items-center">
-                        <label class="fuente-persona" :for="'email-' + index">{{ dccmtem.email }}</label>
+                        <label class="fuente-persona"
+                            :for="'email-' + index">imss_bienestar@imssbienestar.gob.mx</label>
                     </div>
                 </template>
             </div>

@@ -70,7 +70,7 @@
                 headerStyle="width:1%;">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" style="color: white; background-color: #a57f2c;
-                    border-color: #a57f2c;" class="p-button-md p-button-rounded p-button custom-icon" title="Editar"
+                    border-color: #a57f2c;" class="p-button-md p-button-rounded p-button custom-icon2" title="Editar"
                         v-on:click="OpenDialog(slotProps.data)" />
                 </template>
             </Column>

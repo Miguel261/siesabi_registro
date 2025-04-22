@@ -66,13 +66,13 @@
                     <div style="display: flex; gap: 10px;">
                         <Button :icon="slotProps.data.is_enabled ? 'pi pi-eye-slash' : 'pi pi-eye'"
                             style="color: white; background-color: #611232; border-color: #611232;"
-                            class="p-button-md p-button-rounded p-button custom-icon"
+                            class="p-button-md p-button-rounded p-button custom-icon2"
                             @click="ViewCourse(slotProps.data)"
                             :title="slotProps.data.is_enabled ? 'Ocultar' : 'Desplegar'" />
 
                         <Button icon="pi pi-trash"
                             style="color: white; background-color: #a57f2c; border-color: #a57f2c;"
-                            class="p-button-md p-button-rounded p-button custom-icon"
+                            class="p-button-md p-button-rounded p-button custom-icon2"
                             @click="ConfirmDeleteCourse(slotProps.data)" title="Editar" />
                     </div>
                 </template>
@@ -134,7 +134,7 @@
                         <div style="display: flex; gap: 10px;">
                             <Button icon="pi pi-plus"
                                 style="color: white; background-color: #611232; border-color: #611232;"
-                                class="p-button-md p-button-rounded p-button custom-icon"
+                                class="p-button-md p-button-rounded p-button custom-icon2"
                                 @click="ConfirmAddCurse(slotProps.data)" title="Agregar como curso prioritario" />
                         </div>
                     </template>

@@ -66,17 +66,17 @@
                     <div style="display: flex; gap: 10px;">
                         <Button icon="pi pi-arrow-down"
                             style="color: white; background-color: #611232; border-color: #611232;"
-                            class="p-button-md p-button-rounded p-button custom-icon"
+                            class="p-button-md p-button-rounded p-button custom-icon2"
                             @click="ViewContent(slotProps.data)" title="Desplegar" />
 
                         <Button icon="pi pi-file-edit"
                             style="color: white; background-color: #a57f2c; border-color: #a57f2c;"
-                            class="p-button-md p-button-rounded p-button custom-icon"
+                            class="p-button-md p-button-rounded p-button custom-icon2"
                             @click="ModalDirectory(slotProps.data)" title="Editar" />
 
                         <Button icon="pi pi-trash"
                             style="color: white; background-color: #161a1d; border-color: #161a1d;"
-                            class="p-button-md p-button-rounded p-button custom-icon"
+                            class="p-button-md p-button-rounded p-button custom-icon2"
                             @click="ConfirmDelteDirectory(slotProps.data)" title="Eliminar" />
 
                     </div>
